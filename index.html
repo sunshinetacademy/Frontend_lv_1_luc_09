@@ -1,0 +1,2547 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>المحاضرة التاسعة | Flexbox | Sunshine T Academy</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800;900&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --primary: #4A7C59;
+            --primary-dark: #2D5F3F;
+            --primary-light: #7BA889;
+            --primary-soft: #D4E5D8;
+            --secondary: #D4A574;
+            --secondary-dark: #B8895A;
+            --secondary-light: #E8C9A0;
+            --bg-main: #FAF7F2;
+            --bg-cream: #F5EFE6;
+            --bg-card: #FFFFFF;
+            --bg-soft: #EDE5D8;
+            --bg-code: #F9F6F0;
+            --text-dark: #2C1810;
+            --text-body: #4A3728;
+            --text-muted: #6B5744;
+            --text-light: #8B7356;
+            --border: #E5DCC8;
+            --border-soft: #EDE5D8;
+            --success: #5B8C5A;
+            --success-bg: #E3EDDF;
+            --info: #5B8BA0;
+            --info-bg: #DEE8EC;
+            --warning: #C89B6C;
+            --warning-bg: #F0E4D4;
+            --danger: #B85C5C;
+            --danger-bg: #F0DCDC;
+            --purple: #8B7BA8;
+            --purple-bg: #E5DFED;
+            --flex-color: #E06C75;
+            --flex-light: #FCE4E6;
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: var(--bg-main);
+            color: var(--text-body);
+            line-height: 1.8;
+            overflow-x: hidden;
+        }
+
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+
+        header {
+            background: linear-gradient(135deg, #FAF7F2 0%, #EDE5D8 100%);
+            border-bottom: 3px solid var(--primary);
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 15px rgba(74, 124, 89, 0.08);
+        }
+
+        .header-content { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; }
+
+        .logo { display: flex; align-items: center; gap: 12px; font-size: 1.4rem; font-weight: 800; color: var(--primary-dark); }
+
+        .logo-icon {
+            width: 44px; height: 44px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            color: white; font-weight: 900; font-size: 1.3rem;
+            box-shadow: 0 4px 12px rgba(74, 124, 89, 0.25);
+        }
+
+        .lecture-badge {
+            background: var(--bg-card);
+            border: 2px solid var(--primary);
+            color: var(--primary-dark);
+            padding: 8px 18px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        .hero {
+            padding: 70px 40px;
+            text-align: center;
+            background: linear-gradient(135deg, #D4E5D8 0%, #E8C9A0 50%, #F5EFE6 100%);
+            border: 2px solid var(--primary-light);
+            border-radius: 24px;
+            margin: 40px 0;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(74, 124, 89, 0.12);
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%; left: -10%;
+            width: 400px; height: 400px;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.5) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .hero-tag {
+            display: inline-block;
+            background: var(--primary-dark);
+            color: var(--secondary-light);
+            padding: 8px 22px;
+            border-radius: 20px;
+            font-weight: 800;
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+            letter-spacing: 1px;
+        }
+
+        .hero h1 {
+            font-size: 2.8rem;
+            font-weight: 900;
+            margin-bottom: 18px;
+            color: var(--text-dark);
+            line-height: 1.3;
+            position: relative;
+        }
+
+        .hero h1 span { color: var(--flex-color); }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--text-body);
+            max-width: 700px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        section { margin: 60px 0; }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 30px;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid var(--border);
+        }
+
+        .section-title .title-icon {
+            width: 50px; height: 50px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+            color: white;
+            box-shadow: 0 4px 12px rgba(74, 124, 89, 0.2);
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 2px solid var(--border-soft);
+            border-radius: 16px;
+            padding: 28px;
+            margin-bottom: 24px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(74, 124, 89, 0.04);
+        }
+
+        .card:hover {
+            border-color: var(--primary-light);
+            box-shadow: 0 8px 24px rgba(74, 124, 89, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            color: var(--primary-dark);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card p { color: var(--text-body); margin-bottom: 12px; }
+        .card strong { color: var(--text-dark); }
+
+        .objectives-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 18px;
+            margin-top: 20px;
+        }
+
+        .objective-item {
+            background: var(--bg-card);
+            border: 2px solid var(--border-soft);
+            border-right: 5px solid var(--primary);
+            border-radius: 12px;
+            padding: 20px;
+            display: flex;
+            align-items: start;
+            gap: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .objective-item:hover {
+            border-color: var(--primary-light);
+            border-right-color: var(--secondary);
+            background: var(--bg-cream);
+        }
+
+        .objective-number {
+            width: 36px; height: 36px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            color: white; font-weight: 800;
+            flex-shrink: 0;
+            font-size: 1rem;
+            box-shadow: 0 2px 8px rgba(74, 124, 89, 0.25);
+        }
+
+        .objective-item h4 { color: var(--text-dark); font-size: 1.05rem; margin-bottom: 5px; }
+        .objective-item p { color: var(--text-muted); font-size: 0.9rem; }
+
+        .review-box {
+            background: linear-gradient(135deg, var(--purple-bg) 0%, #F5F3FF 100%);
+            border: 2px solid var(--purple);
+            border-radius: 16px;
+            padding: 28px;
+            margin: 30px 0;
+        }
+
+        .review-box h3 {
+            color: var(--purple);
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .review-list {
+            list-style: none;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 12px;
+        }
+
+        .review-list li {
+            background: var(--bg-card);
+            border: 1px solid #D4C9E8;
+            border-radius: 10px;
+            padding: 12px 16px;
+            padding-right: 40px;
+            position: relative;
+            color: var(--text-body);
+        }
+
+        .review-list li::before {
+            content: '✓';
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--purple);
+            font-weight: 900;
+            font-size: 1.1rem;
+        }
+
+        .analogy-box {
+            background: linear-gradient(135deg, var(--bg-cream) 0%, var(--bg-soft) 100%);
+            border: 2px dashed var(--secondary);
+            border-radius: 16px;
+            padding: 28px;
+            margin: 30px 0;
+        }
+
+        .analogy-box h3 { color: var(--secondary-dark); margin-bottom: 15px; font-size: 1.3rem; }
+
+        .analogy-list { list-style: none; }
+
+        .analogy-list li {
+            padding: 12px 0;
+            padding-right: 40px;
+            position: relative;
+            color: var(--text-body);
+            border-bottom: 1px dashed var(--border);
+        }
+
+        .analogy-list li:last-child { border-bottom: none; }
+
+        .analogy-list li::before {
+            content: '💡';
+            position: absolute;
+            right: 0;
+            top: 12px;
+            font-size: 1.2rem;
+        }
+
+        .analogy-list li strong { color: var(--primary-dark); }
+
+        .code-wrapper {
+            margin: 25px 0;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 2px solid var(--border);
+            background: var(--bg-code);
+            box-shadow: 0 4px 12px rgba(74, 124, 89, 0.06);
+        }
+
+        .code-header {
+            background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
+            padding: 10px 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .code-lang {
+            background: var(--text-dark);
+            color: var(--secondary-light);
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+        }
+
+        .code-dots { display: flex; gap: 6px; }
+
+        .code-dots span {
+            width: 12px; height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.4);
+        }
+
+        .code-dots span:nth-child(1) { background: #E8A5A5; }
+        .code-dots span:nth-child(2) { background: #E8D4A0; }
+        .code-dots span:nth-child(3) { background: #A5D4B0; }
+
+        pre {
+            padding: 20px;
+            overflow-x: auto;
+            margin: 0;
+            background: var(--bg-code);
+        }
+
+        pre code {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.92rem;
+            color: var(--text-dark);
+            line-height: 1.7;
+            display: block;
+            direction: ltr;
+            text-align: left;
+        }
+
+        .selector { color: #8B2252; font-weight: 700; }
+        .property { color: #0550AE; }
+        .css-value { color: #116329; }
+        .css-number { color: #0550AE; }
+        .css-unit { color: #953800; }
+        .css-color-val { color: #6639BA; }
+        .punctuation { color: #6B5744; }
+        .comment { color: #8B7356; font-style: italic; }
+        .flex-prop { color: #E06C75; font-weight: 700; }
+
+        .info-box {
+            background: var(--info-bg);
+            border: 2px solid #B8D4DE;
+            border-right-width: 5px;
+            border-radius: 10px;
+            padding: 18px 22px;
+            margin: 20px 0;
+        }
+
+        .info-box h4 { color: #2E6B8A; margin-bottom: 8px; font-size: 1.05rem; }
+        .info-box p { color: #1F4A5E; font-size: 0.95rem; }
+
+        .warning-box {
+            background: var(--warning-bg);
+            border: 2px solid #E5D4B8;
+            border-right-width: 5px;
+            border-radius: 10px;
+            padding: 18px 22px;
+            margin: 20px 0;
+        }
+
+        .warning-box h4 { color: var(--secondary-dark); margin-bottom: 8px; }
+        .warning-box p { color: var(--text-body); font-size: 0.95rem; }
+
+        .success-box {
+            background: var(--success-bg);
+            border: 2px solid #B8D4B5;
+            border-right-width: 5px;
+            border-radius: 10px;
+            padding: 18px 22px;
+            margin: 20px 0;
+        }
+
+        .success-box h4 { color: var(--primary-dark); margin-bottom: 8px; }
+        .success-box p { color: #2D5F3F; font-size: 0.95rem; }
+
+        .danger-box {
+            background: var(--danger-bg);
+            border: 2px solid #E0B8B8;
+            border-right-width: 5px;
+            border-radius: 10px;
+            padding: 18px 22px;
+            margin: 20px 0;
+        }
+
+        .danger-box h4 { color: #8B3A3A; margin-bottom: 8px; }
+        .danger-box p { color: #5C2828; font-size: 0.95rem; }
+
+        .element-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin: 20px 0;
+            background: var(--bg-card);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .element-table thead { background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%); color: white; }
+        .element-table th { padding: 14px 18px; text-align: right; font-weight: 700; font-size: 1rem; }
+        .element-table td { padding: 14px 18px; border-bottom: 1px solid var(--border-soft); color: var(--text-body); }
+        .element-table tr:last-child td { border-bottom: none; }
+        .element-table tr:hover { background: var(--bg-cream); }
+        .element-table code {
+            background: var(--bg-code);
+            border: 1px solid var(--border);
+            padding: 3px 8px;
+            border-radius: 5px;
+            color: var(--primary-dark);
+            font-family: 'Fira Code', monospace;
+            font-size: 0.88rem;
+            font-weight: 600;
+            direction: ltr;
+            display: inline-block;
+        }
+
+        .tag-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+            margin: 25px 0;
+        }
+
+        .tag-card {
+            background: var(--bg-card);
+            border: 2px solid var(--border-soft);
+            border-radius: 12px;
+            padding: 20px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tag-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
+        }
+
+        .tag-card:hover {
+            border-color: var(--primary-light);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(74, 124, 89, 0.1);
+        }
+
+        .tag-card .tag-name {
+            font-family: 'Fira Code', monospace;
+            background: var(--bg-code);
+            color: var(--flex-color);
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            display: inline-block;
+            margin-bottom: 10px;
+            border: 1px solid var(--border);
+            direction: ltr;
+        }
+
+        .tag-card h5 { color: var(--text-dark); font-size: 1.05rem; margin-bottom: 8px; }
+        .tag-card p { color: var(--text-muted); font-size: 0.88rem; }
+
+        /* Flex Demo */
+        .flex-demo {
+            background: var(--bg-card);
+            border: 2px solid var(--border);
+            border-radius: 16px;
+            padding: 25px;
+            margin: 25px 0;
+        }
+
+        .flex-demo h4 {
+            color: var(--primary-dark);
+            margin-bottom: 15px;
+            text-align: center;
+            font-size: 1.1rem;
+        }
+
+        .flex-container {
+            background: var(--bg-cream);
+            border: 2px dashed var(--flex-color);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+            display: flex;
+            gap: 10px;
+        }
+
+        .flex-item {
+            background: var(--primary);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            font-weight: 700;
+            text-align: center;
+            min-width: 60px;
+        }
+
+        .flex-item:nth-child(2) { background: var(--secondary); }
+        .flex-item:nth-child(3) { background: var(--info); }
+        .flex-item:nth-child(4) { background: var(--purple); }
+        .flex-item:nth-child(5) { background: var(--danger); }
+
+        .flex-label {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+            direction: ltr;
+            text-align: left;
+            background: var(--bg-code);
+            padding: 5px 10px;
+            border-radius: 6px;
+            display: inline-block;
+        }
+
+        /* Axis Diagram */
+        .axis-diagram {
+            background: var(--bg-card);
+            border: 2px solid var(--border);
+            border-radius: 16px;
+            padding: 30px;
+            margin: 25px 0;
+            text-align: center;
+        }
+
+        .axis-container {
+            position: relative;
+            display: inline-block;
+            background: var(--bg-cream);
+            border: 3px solid var(--flex-color);
+            border-radius: 12px;
+            padding: 40px 60px;
+            margin: 20px 0;
+        }
+
+        .axis-arrow {
+            position: absolute;
+            font-weight: 900;
+            color: var(--flex-color);
+            font-size: 1.2rem;
+        }
+
+        .axis-arrow.main-axis {
+            top: 50%;
+            transform: translateY(-50%);
+            left: 10px;
+            right: 10px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .axis-arrow.cross-axis {
+            left: 50%;
+            transform: translateX(-50%);
+            top: 10px;
+            bottom: 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .axis-items {
+            display: flex;
+            gap: 10px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .axis-item {
+            background: var(--primary);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            font-weight: 700;
+        }
+
+        /* Comparison Grid */
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .comparison-card {
+            background: var(--bg-card);
+            border: 2px solid var(--border-soft);
+            border-radius: 16px;
+            padding: 24px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .comparison-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
+        }
+
+        .comparison-card:hover {
+            border-color: var(--primary-light);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(74, 124, 89, 0.12);
+        }
+
+        .comparison-icon { font-size: 2.5rem; margin-bottom: 15px; }
+        .comparison-card h4 { color: var(--primary-dark); font-size: 1.3rem; margin-bottom: 10px; }
+        .comparison-card .subtitle { color: var(--text-dark); font-weight: 700; margin-bottom: 12px; }
+        .comparison-card p { color: var(--text-body); font-size: 0.95rem; margin-bottom: 10px; }
+
+        /* Debug Section */
+        .debug-box {
+            background: var(--danger-bg);
+            border: 2px solid var(--danger);
+            border-radius: 16px;
+            padding: 28px;
+            margin: 30px 0;
+        }
+
+        .debug-box h3 {
+            color: #8B3A3A;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.3rem;
+        }
+
+        .debug-comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .debug-wrong, .debug-right { border-radius: 10px; overflow: hidden; }
+        .debug-wrong { border: 2px solid var(--danger); }
+        .debug-right { border: 2px solid var(--success); }
+
+        .debug-label {
+            padding: 8px 15px;
+            font-weight: 800;
+            font-size: 0.9rem;
+            text-align: center;
+        }
+
+        .debug-wrong .debug-label { background: var(--danger); color: white; }
+        .debug-right .debug-label { background: var(--success); color: white; }
+        .debug-wrong pre, .debug-right pre { background: var(--bg-card); padding: 15px; margin: 0; }
+
+        .quiz-section {
+            background: var(--bg-card);
+            border: 3px solid var(--success);
+            border-radius: 20px;
+            padding: 35px;
+            margin: 40px 0;
+            box-shadow: 0 8px 24px rgba(91, 140, 90, 0.1);
+        }
+
+        .quiz-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 3px dashed var(--success-bg);
+        }
+
+        .quiz-header-icon {
+            width: 55px; height: 55px;
+            background: linear-gradient(135deg, var(--success) 0%, var(--primary-dark) 100%);
+            border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.8rem;
+            color: white;
+            box-shadow: 0 4px 12px rgba(91, 140, 90, 0.25);
+        }
+
+        .quiz-header h2 { color: var(--primary-dark); font-size: 1.6rem; }
+        .quiz-header p { color: var(--text-muted); font-size: 0.95rem; }
+
+        .question {
+            background: var(--bg-cream);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 22px;
+            margin-bottom: 18px;
+            transition: all 0.3s ease;
+        }
+
+        .question:hover { border-color: var(--primary-light); background: var(--bg-soft); }
+
+        .question-number {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 4px 14px;
+            border-radius: 6px;
+            font-weight: 800;
+            font-size: 0.85rem;
+            margin-bottom: 12px;
+            box-shadow: 0 2px 6px rgba(74, 124, 89, 0.25);
+        }
+
+        .question h4 { color: var(--text-dark); font-size: 1.05rem; margin-bottom: 15px; line-height: 1.6; }
+
+        .options { list-style: none; display: grid; gap: 10px; }
+
+        .options li {
+            background: var(--bg-card);
+            border: 2px solid var(--border-soft);
+            border-radius: 8px;
+            padding: 12px 16px;
+            color: var(--text-body);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .options li:hover { border-color: var(--primary-light); background: var(--bg-cream); color: var(--text-dark); }
+
+        .option-letter {
+            width: 28px; height: 28px;
+            background: var(--bg-soft);
+            border: 2px solid var(--primary);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 700;
+            font-size: 0.85rem;
+            color: var(--primary-dark);
+            flex-shrink: 0;
+        }
+
+        .homework-section {
+            background: var(--bg-card);
+            border: 3px solid var(--info);
+            border-radius: 20px;
+            padding: 35px;
+            margin: 40px 0;
+            box-shadow: 0 8px 24px rgba(91, 139, 160, 0.1);
+        }
+
+        .homework-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 3px dashed var(--info-bg);
+        }
+
+        .homework-header-icon {
+            width: 55px; height: 55px;
+            background: linear-gradient(135deg, var(--info) 0%, #3D6B80 100%);
+            border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.8rem;
+            color: white;
+            box-shadow: 0 4px 12px rgba(91, 139, 160, 0.25);
+        }
+
+        .homework-header h2 { color: #2E6B8A; font-size: 1.6rem; }
+        .homework-header p { color: var(--text-muted); font-size: 0.95rem; }
+
+        .homework-item {
+            background: var(--bg-cream);
+            border: 2px solid var(--border);
+            border-right: 5px solid var(--info);
+            border-radius: 12px;
+            padding: 22px;
+            margin-bottom: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .homework-item:hover { border-color: var(--info); background: var(--info-bg); }
+
+        .homework-item h4 {
+            color: #2E6B8A;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .homework-item p { color: var(--text-body); margin-bottom: 10px; }
+
+        .homework-item ul { list-style: none; padding-right: 0; }
+
+        .homework-item ul li {
+            padding: 6px 0;
+            padding-right: 25px;
+            position: relative;
+            color: var(--text-body);
+            font-size: 0.95rem;
+        }
+
+        .homework-item ul li::before {
+            content: '◆';
+            position: absolute;
+            right: 0;
+            color: var(--info);
+            font-size: 0.7rem;
+            top: 10px;
+        }
+
+        .summary-box {
+            background: linear-gradient(135deg, var(--primary-soft) 0%, var(--bg-soft) 100%);
+            border: 3px solid var(--primary);
+            border-radius: 16px;
+            padding: 30px;
+            margin: 40px 0;
+            box-shadow: 0 8px 24px rgba(74, 124, 89, 0.1);
+        }
+
+        .summary-box h3 { color: var(--primary-dark); font-size: 1.5rem; margin-bottom: 20px; }
+
+        .summary-list { list-style: none; }
+
+        .summary-list li {
+            padding: 10px 0;
+            padding-right: 35px;
+            position: relative;
+            color: var(--text-body);
+            border-bottom: 1px dashed var(--border);
+        }
+
+        .summary-list li:last-child { border-bottom: none; }
+
+        .summary-list li::before {
+            content: '✓';
+            position: absolute;
+            right: 0;
+            color: var(--success);
+            font-weight: 900;
+            font-size: 1.3rem;
+        }
+
+        .next-box {
+            background: linear-gradient(135deg, var(--bg-cream) 0%, var(--bg-soft) 100%);
+            border: 2px dashed var(--secondary);
+            border-radius: 16px;
+            padding: 25px;
+            margin: 30px 0;
+            text-align: center;
+        }
+
+        .next-box h3 { color: var(--secondary-dark); margin-bottom: 10px; font-size: 1.3rem; }
+        .next-box p { color: var(--text-body); font-size: 1.05rem; }
+
+        .next-box .next-topic {
+            display: inline-block;
+            background: var(--secondary);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: 700;
+            margin-top: 15px;
+        }
+
+        footer {
+            background: linear-gradient(135deg, var(--bg-cream) 0%, var(--bg-soft) 100%);
+            border-top: 3px solid var(--primary);
+            padding: 40px 0;
+            margin-top: 80px;
+            text-align: center;
+        }
+
+        footer .logo { justify-content: center; margin-bottom: 20px; }
+        footer p { color: var(--text-muted); margin-bottom: 8px; }
+        footer .motto { color: var(--primary-dark); font-weight: 700; font-size: 1.1rem; margin-top: 15px; }
+
+        code.inline {
+            background: var(--bg-code);
+            border: 1px solid var(--border);
+            padding: 2px 8px;
+            border-radius: 5px;
+            color: var(--flex-color);
+            font-family: 'Fira Code', monospace;
+            font-size: 0.88rem;
+            font-weight: 600;
+            direction: ltr;
+            display: inline-block;
+        }
+
+        @media print {
+            @page { size: A4; margin: 1.5cm; }
+            body { background: white; font-size: 11pt; line-height: 1.5; }
+            header { position: static; box-shadow: none; }
+            .hero, section, .card, .question, .homework-item { page-break-inside: avoid; }
+            h1, h2, h3, h4 { page-break-after: avoid; }
+            .code-wrapper { page-break-inside: avoid; }
+            .debug-comparison, .comparison-grid { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2rem; }
+            .hero p { font-size: 1rem; }
+            .section-title { font-size: 1.5rem; }
+            .objectives-grid { grid-template-columns: 1fr; }
+            .tag-grid { grid-template-columns: 1fr; }
+            .debug-comparison { grid-template-columns: 1fr; }
+            .comparison-grid { grid-template-columns: 1fr; }
+            .flex-container { flex-wrap: wrap; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <div class="logo-icon">S</div>
+                    <span>Sunshine T Academy</span>
+                </div>
+                <div class="lecture-badge">Frontend Level 1 • المحاضرة التاسعة</div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+
+        <section class="hero">
+            <span class="hero-tag">LECTURE 09</span>
+            <h1><span>Flexbox</span> — Layout الحديث</h1>
+            <p>أقوى أداة في CSS لبناء Layoutات مرنة واحترافية. هنتعلم إزاي نرتب العناصر أفقياً ورأسياً بسهولة، ونبني Navigation و Cards باحتراف.</p>
+        </section>
+
+        <section>
+            <h2 class="section-title">
+                <div class="title-icon">🔄</div>
+                <span>مراجعة سريعة</span>
+            </h2>
+
+            <div class="review-box">
+                <h3>📚 من المحاضرة اللي فاتت</h3>
+                <ul class="review-list">
+                    <li>Display: Block, Inline, Inline-block, None</li>
+                    <li>Position: Static, Relative, Absolute, Fixed, Sticky</li>
+                    <li>Z-index لترتيب الطبقات</li>
+                    <li>Overflow للتحكم في الفائض</li>
+                    <li>Inline-block للـ Cards البسيطة</li>
+                </ul>
+            </div>
+
+            <div class="info-box">
+                <h4>🎯 هدف النهاردة</h4>
+                <p>النهاردة هنبدأ رحلة <strong>Flexbox</strong> — أقوى نظام Layout في CSS الحديث. Flexbox حل كل المشاكل اللي كانت عندنا مع Inline-block و Position. هنتعلم إزاي نرتب العناصر بسهولة في اتجاه واحد (صف أو عمود)، ونتحكم في المسافات والمحاذاة بشكل احترافي.</p>
+            </div>
+        </section>
+
+        <section>
+            <h2 class="section-title">
+                <div class="title-icon">🎯</div>
+                <span>الأهداف التعليمية</span>
+            </h2>
+            <p style="color: var(--text-muted); margin-bottom: 20px;">في نهاية المحاضرة، الطالب هيقدر:</p>
+
+            <div class="objectives-grid">
+                <div class="objective-item">
+                    <div class="objective-number">1</div>
+                    <div>
+                        <h4>فهم Flexbox</h4>
+                        <p>يعرف ما هو Flexbox وليه مهم</p>
+                    </div>
+                </div>
+                <div class="objective-item">
+                    <div class="objective-number">2</div>
+                    <div>
+                        <h4>Flex Container vs Items</h4>
+                        <p>يفهم الفرق بين الأب والأبناء</p>
+                    </div>
+                </div>
+                <div class="objective-item">
+                    <div class="objective-number">3</div>
+                    <div>
+                        <h4>flex-direction</h4>
+                        <p>row, column, row-reverse, column-reverse</p>
+                    </div>
+                </div>
+                <div class="objective-item">
+                    <div class="objective-number">4</div>
+                    <div>
+                        <h4>justify-content</h4>
+                        <p>التحكم في المحاذاة على Main Axis</p>
+                    </div>
+                </div>
+                <div class="objective-item">
+                    <div class="objective-number">5</div>
+                    <div>
+                        <h4>align-items & align-self</h4>
+                        <p>التحكم في المحاذاة على Cross Axis</p>
+                    </div>
+                </div>
+                <div class="objective-item">
+                    <div class="objective-number">6</div>
+                    <div>
+                        <h4>flex-wrap & gap</h4>
+                        <p>التفاف العناصر والمسافات بينهم</p>
+                    </div>
+                </div>
+                <div class="objective-item">
+                    <div class="objective-number">7</div>
+                    <div>
+                        <h4>flex-grow, shrink, basis</h4>
+                        <p>التحكم في حجم العناصر</p>
+                    </div>
+                </div>
+                <div class="objective-item">
+                    <div class="objective-number">8</div>
+                    <div>
+                        <h4>تطبيقات عملية</h4>
+                        <p>Navigation, Cards, Centering</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========== What is Flexbox? ========== -->
+        <section>
+            <h2 class="section-title">
+                <div class="title-icon">📦</div>
+                <span>ما هو Flexbox؟</span>
+            </h2>
+
+            <div class="card">
+                <h3>📖 التعريف</h3>
+                <p><strong>Flexbox</strong> (Flexible Box Layout) هو نظام Layout أحادي البعد في CSS. بيخلينا نرتب العناصر في <strong>اتجاه واحد</strong> (صف أو عمود) ونتحكم في:</p>
+                <p>• اتجاه الترتيب (أفقي أو رأسي)</p>
+                <p>• المحاذاة (توسيط، توزيع، إلخ)</p>
+                <p>• المسافات بين العناصر</p>
+                <p>• حجم العناصر بشكل مرن</p>
+            </div>
+
+            <div class="analogy-box">
+                <h3>💡 تشبيه من الحياة</h3>
+                <p>تخيل إنك في <strong>قطار</strong>:</p>
+                <ul class="analogy-list">
+                    <li><strong>Flex Container</strong> = القطار نفسه</li>
+                    <li><strong>Flex Items</strong> = العربات</li>
+                    <li><strong>flex-direction</strong> = اتجاه السكة (أفقي أو رأسي)</li>
+                    <li><strong>justify-content</strong> = توزيع العربات على السكة</li>
+                    <li><strong>align-items</strong> = مكان العربات بالنسبة للسكة (فوق، تحت، وسط)</li>
+                </ul>
+            </div>
+
+            <div class="comparison-grid">
+                <div class="comparison-card">
+                    <div class="comparison-icon">🔴</div>
+                    <h4>قبل Flexbox</h4>
+                    <p>كنا نستخدم:</p>
+                    <p>• <strong>Inline-block</strong> — فيه مشاكل المسافات</p>
+                    <p>• <strong>Float</strong> — معقد ويسبب مشاكل</p>
+                    <p>• <strong>Position</strong> — صعب في الـ Layout</p>
+                    <p>• <strong>Tables</strong> — مش مرن</p>
+                </div>
+                <div class="comparison-card">
+                    <div class="comparison-icon">🟢</div>
+                    <h4>بعد Flexbox</h4>
+                    <p>كل حاجة بقت سهلة:</p>
+                    <p>• <strong>توسيط</strong> بسطر واحد</p>
+                    <p>• <strong>توزيع المسافات</strong> بسهولة</p>
+                    <p>• <strong>ترتيب مرن</strong> يتكيف مع الحجم</p>
+                    <p>• <strong>كود نظيف</strong> وسهل الفهم</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========== Container vs Items ========== -->
+        <section>
+            <h2 class="section-title">
+                <div class="title-icon">👨‍👧‍👦</div>
+                <span>Flex Container vs Flex Items</span>
+            </h2>
+
+            <div class="card">
+                <h3>📖 المفهوم الأساسي</h3>
+                <p>Flexbox بيعتمد على علاقة بين <strong>عنصرين</strong>:</p>
+                <p>1. <strong>Flex Container</strong> (الأب): العنصر اللي عليه <code class="inline">display: flex</code></p>
+                <p>2. <strong>Flex Items</strong> (الأبناء): العناصر المباشرة جوه الـ Container</p>
+            </div>
+
+            <div class="code-wrapper">
+                <div class="code-header">
+                    <span class="code-lang">CSS — تفعيل Flexbox</span>
+                    <div class="code-dots"><span></span><span></span><span></span></div>
+                </div>
+<pre><code><span class="comment">/* الأب = Flex Container */</span>
+<span class="selector">.container</span> <span class="punctuation">{</span>
+    <span class="flex-prop">display</span><span class="punctuation">:</span> <span class="css-value">flex</span><span class="punctuation">;</span>
+<span class="punctuation">}</span>
+
+<span class="comment">/* الأبناء = Flex Items (تلقائياً) */</span>
+<span class="comment">/* مش محتاج نعملهم حاجة */</span></code></pre>
+            </div>
+
+            <div class="flex-demo">
+                <h4>📦 أول Flex Container</h4>
+                <div class="flex-label">display: flex</div>
+                <div class="flex-container">
+                    <div class="flex-item">Item 1</div>
+                    <div class="flex-item">Item 2</div>
+                    <div class="flex-item">Item 3</div>
+                </div>
+                <p style="text-align: center; color: var(--text-muted); margin-top: 10px;">لاحظ إن العناصر اصطفّت أفقياً تلقائياً!</p>
+            </div>
+
+            <div class="warning-box">
+                <h4>⚠️ قاعدة مهمة</h4>
+                <p>الـ Flex properties بتشتغل بس على <strong>الأبناء المباشرين</strong>. لو عندك عنصر جوه عنصر تاني جوه الـ Container، مش هيأثر عليه.</p>
+            </div>
+        </section>
+
+        <!-- ========== Axes ========== -->
+        <section>
+            <h2 class="section-title">
+                <div class="title-icon">🧭</div>
+                <span>المحاور: Main Axis & Cross Axis</span>
+            </h2>
+
+            <div class="card">
+                <h3>📖 فهم المحاور</h3>
+                <p>Flexbox بيشتغل بمحورين:</p>
+                <p>1. <strong>Main Axis</strong> (المحور الرئيسي): الاتجاه اللي العناصر بتترتب فيه</p>
+                <p>2. <strong>Cross Axis</strong> (المحور العرضي): عمودي على Main Axis</p>
+            </div>
+
+            <div class="axis-diagram">
+                <h4 style="color: var(--primary-dark); margin-bottom: 20px;">🧭 المحاور في Flexbox</h4>
+                
+                <div class="axis-container">
+                    <div class="axis-arrow main-axis">
+                        <span>← Main Axis →</span>
+                    </div>
+                    <div class="axis-arrow cross-axis">
+                        <span>↑</span>
+                        <span>Cross Axis</span>
+                        <span>↓</span>
+                    </div>
+                    <div class="axis-items">
+                        <div class="axis-item">Item 1</div>
+                        <div class="axis-item">Item 2</div>
+                        <div class="axis-item">Item 3</div>
+                    </div>
+                </div>
+
+                <p style="color: var(--text-muted); margin-top: 20px;">في <code class="inline">flex-direction: row</code> (الافتراضي): Main Axis = أفقي، Cross Axis = رأسي</p>
+            </div>
+
+            <div class="info-box">
+                <h4>💡 ليه المحاور مهمة؟</h4>
+                <p>• <code class="inline">justify-content</code> بيشتغل على <strong>Main Axis</strong></p>
+                <p>• <code class="inline">align-items</code> بيشتغل على <strong>Cross Axis</strong></p>
+                <p>لما تغير <code class="inline">flex-direction</code>، المحاور بتتبدل!</p>
+            </div>
+        </section>
+
+        <!-- ========== flex-direction ========== -->
+        <section>
+            <h2 class="section-title">
+                <div class="title-icon">➡️</div>
+                <span>flex-direction — اتجاه الترتيب</span>
+            </h2>
+
+            <div class="card">
+                <h3>📖 التحكم في الاتجاه</h3>
+                <p><code class="inline">flex-direction</code> بيحدد اتجاه الـ Main Axis — يعني العناصر هترتب إزاي.</p>
+            </div>
+
+            <div class="tag-grid">
+                <div class="tag-card">
+                    <span class="tag-name">row</span>
+                    <h5>أفقي من اليسار لليمين</h5>
+                    <p>الافتراضي. العناصر تصطف أفقياً.</p>
+                </div>
+                <div class="tag-card">
+                    <span class="tag-name">row-reverse</span>
+                    <h5>أفقي معكوس</h5>
+                    <p>من اليمين لليسار.</p>
+                </div>
+                <div class="tag-card">
+                    <span class="tag-name">column</span>
+                    <h5>رأسي من فوق لتحت</h5>
+                    <p>العناصر تصطف عمودياً.</p>
+                </div>
+                <div class="tag-card">
+                    <span class="tag-name">column-reverse</span>
+                    <h5>رأسي معكوس</h5>
+                    <p>من تحت لفوق.</p>
+                </div>
+            </div>
+
+            <div class="flex-demo">
+                <h4>📊 flex-direction: row (الافتراضي)</h4>
+                <div class="flex-label">display: flex; flex-direction: row;</div>
+                <div class="flex-container" style="flex-direction: row;">
+                    <div class="flex-item">1</div>
+                    <div class="flex-item">2</div>
+                    <div class="flex-item">3</div>
+                    <div class="flex-item">4</div>
+                </div>
+            </div>
+
+            <div class="flex-demo">
+                <h4>📊 flex-direction: column</h4>
+                <div class="flex-label">display: flex; flex-direction: column;</div>
+                <div class="flex-container" style="flex-direction: column; max-width: 200px;">
+                    <div class="flex-item">1</div>
+                    <div class="flex-item">2</div>
+                    <div class="flex-item">3</div>
+                    <div class="flex-item">4</div>
+                </div>
+            </div>
+
+            <div class="code-wrapper">
+                <div class="code-header">
+                    <span class="code-lang">CSS — flex-direction</span>
+                    <div class="code-dots"><span></span><span></span><span></span></div>
+                </div>
+<pre><code><span class="selector">.container</span> <span class="punctuation">{</span>
+    <span class="flex-prop">display</span><span class="punctuation">:</span> <span class="css-value">flex</span><span class="punctuation">;</span>
+    <span class="flex-prop">flex-direction</span><span class="punctuation">:</span> <span class="css-value">row</span><span class="punctuation">;</span> <span class="comment">/* الافتراضي */</span>
+<span class="punctuation">}</span>
+
+<span class="selector">.vertical-nav</span> <span class="punctuation">{</span>
+    <span class="flex-prop">display</span><span class="punctuation">:</span> <span class="css-value">flex</span><span class="punctuation">;</span>
+    <span class="flex-prop">flex-direction</span><span class="punctuation">:</span> <span class="css-value">column</span><span class="punctuation">;</span>
+<span class="punctuation">}</span></code></pre>
+            </div>
+        </section>
+
+        <!-- ========== justify-content ========== -->
+        <section>
+            <h2 class="section-title">
+                <div class="title-icon">⚖️</div>
+                <span>justify-content — المحاذاة على Main Axis</span>
+            </h2>
+
+            <div class="card">
+                <h3>📖 توزيع العناصر على المحور الرئيسي</h3>
+                <p><code class="inline">justify-content</code> بيحدد إزاي العناصر تتوزع على الـ Main Axis.</p>
+            </div>
+
+            <div class="tag-grid">
+                <div class="tag-card">
+                    <span class="tag-name">flex-start</span>
+                    <h5>في البداية</h5>
+                    <p>الافتراضي. العناصر في أول الـ Container.</p>
+                </div>
+                <div class="tag-card">
+                    <span class="tag-name">flex-end</span>
+                    <h5>في النهاية</h5>
+                    <p>العناصر في آخر الـ Container.</p>
+                </div>
+                <div class="tag-card">
+                    <span class="tag-name">center</span>
+                    <h5>في الوسط</h5>
+                    <p>العناصر في المنتصف.</p>
+                </div>
+                <div class="tag-card">
+                    <span class="tag-name">space-between</span>
+                    <h5>مسافات متساوية</h5>
+                    <p>أول عنصر في البداية، آخر في النهاية، والباقي متوزعين.</p>
+                </div>
+                <div class="tag-card">
+                    <span class="tag-name">space-around</span>
+                    <h5>مسافات حول العناصر</h5>
+                    <p>مسافة متساوية حول كل عنصر.</p>
+                </div>
+                <div class="tag-card">
+                    <span class="tag-name">space-evenly</span>
+                    <h5>مسافات متساوية تماماً</h5>
+                    <p>نفس المسافة بين كل العناصر والحواف.</p>
+                </div>
+            </div>
+
+            <div class="flex-demo">
+                <h4>📊 justify-content: flex-start (الافتراضي)</h4>
+                <div class="flex-label">justify-content: flex-start;</div>
+                <div class="flex-container" style="justify-content: flex-start;">
+                    <div class="flex-item">1</div>
+                    <div class="flex-item">2</div>
+                    <div class="flex-item">3</div>
+                </div>
+            </div>
+
+            <div class="flex-demo">
+                <h4>📊 justify-content: center</h4>
+                <div class="flex-label">justify-content: center;</div>
+                <div class="flex-container" style="justify-content: center;">
+                    <div class="flex-item">1</div>
+                    <div class="flex-item">2</div>
+                    <div class="flex-item">3</div>
+                </div>
+            </div>
+
+            <div class="flex-demo">
+                <h4>📊 justify-content: space-between</h4>
+                <div class="flex-label">justify-content: space-between;</div>
+                <div class="flex-container" style="justify-content: space-between;">
+                    <div class="flex-item">1</div>
+                    <div class="flex-item">2</div>
+                    <div class="flex-item">3</div>
+                </div>
+            </div>
+
+            <div class="flex-demo">
+                <h4>📊 justify-content: space-around</h4>
+                <div class="flex-label">justify-content: space-around;</div>
+                <div class="flex-container" style="justify-content: space-around;">
+                    <div class="flex-item">1</div>
+                    <div class="flex-item">2</div>
+                    <div class="flex-item">3</div>
+                </div>
+            </div>
+
+            <div class="flex-demo">
+                <h4>📊 justify-content: space-evenly</h4>
+                <div class="flex-label">justify-content: space-evenly;</div>
+                <div class="flex-container" style="justify-content: space-evenly;">
+                    <div class="flex-item">1</div>
+                    <div class="flex-item">2</div>
+                    <div class="flex-item">3</div>
+                </div>
+            </div>
+
+            <div class="code-wrapper">
+                <div class="code-header">
+                    <span class="code-lang">CSS — justify-content</span>
+                    <div class="code-dots"><span></span><span></span><span></span></div>
+                </div>
+<pre><code><span class="selector">.navbar</span> <span class="punctuation">{</span>
+    <span class="flex-prop">display</span><span class="punctuation">:</span> <span class="css-value">flex</span><span class="punctuation">;</span>
+    <span class="flex-prop">justify-content</span><span class="punctuation">:</span> <span class="css-value">space-between</span><span class="punctuation">;</span>
+<span class="punctuation">}</span>
+
+<span class="selector">.centered-content</span> <span class="punctuation">{</span>
+    <span class="flex-prop">display</span><span class="punctuation">:</span> <span class="css-value">flex</span><span class="punctuation">;</span>
+    <span class="flex-prop">justify-content</span><span class="punctuation">:</span> <span class="css-value">center</span><span class="punctuation">;</span>
+<span class="punctuation">}</span></code></pre>
+            </div>
+        </section>
+
+        <!-- ========== align-items ========== -->
+        <section>
+            <h2 class="section-title">
+                <div class="title-icon">📏</div>
+                <span>align-items — المحاذاة على Cross Axis</span>
+            </h2>
+
+            <div class="card">
+                <h3>📖 التحكم في المحاذاة العمودية</h3>
+                <p><code class="inline">align-items</code> بيحدد إزاي العناصر تتوزع على الـ Cross Axis (العمودي في حالة row).</p>
+            </div>
+
+            <div class="tag-grid">
+                <div class="tag-card">
+                    <span class="tag-name">stretch</span>
+                    <h5>تمدد (الافتراضي)</h5>
+                    <p>العناصر بتمتلئ ارتفاع الـ Container.</p>
+                </div>
+                <div class="tag-card">
+                    <span class="tag-name">flex-start</span>
+                    <h5>في الأعلى</h5>
+                    <p>العناصر في أعلى الـ Container.</p>
+                </div>
+                <div class="tag-card">
+                    <span class="tag-name">flex-end</span>
+                    <h5>في الأسفل</h5>
+                    <p>العناصر في أسفل الـ Container.</p>
+                </div>
+                <div class="tag-card">
+                    <span class="tag-name">center</span>
+                    <h5>في الوسط</h5>
+                    <p>العناصر في المنتصف عمودياً.</p>
+                </div>
+                <div class="tag-card">
+                    <span class="tag-name">baseline</span>
+                    <h5>على السطر الأساسي</h5>
+                    <p>محاذاة على أساس النص.</p>
+                </div>
+            </div>
+
+            <div class="flex-demo">
+                <h4>📊 align-items: stretch (الافتراضي)</h4>
+                <div class="flex-label">align-items: stretch;</div>
+                <div class="flex-container" style="align-items: stretch; height: 150px;">
+                    <div class="flex-item" style="padding: 10px;">1</div>
+                    <div class="flex-item" style="padding: 20px;">2</div>
+                    <div class="flex-item" style="padding: 15px;">3</div>
+                </div>
+            </div>
+
+            <div class="flex-demo">
+                <h4>📊 align-items: center</h4>
+                <div class="flex-label">align-items: center;</div>
+                <div class="flex-container" style="align-items: center; height: 150px;">
+                    <div class="flex-item">1</div>
+                    <div class="flex-item" style="padding: 25px 20px;">2</div>
+                    <div class="flex-item">3</div>
+                </div>
+            </div>
+
+            <div class="flex-demo">
+                <h4>📊 align-items: flex-start</h4>
+                <div class="flex-label">align-items: flex-start;</div>
+                <div class="flex-container" style="align-items: flex-start; height: 150px;">
+                    <div class="flex-item">1</div>
+                    <div class="flex-item" style="padding: 25px 20px;">2</div>
+                    <div class="flex-item">3</div>
+                </div>
+            </div>
+
+            <div class="code-wrapper">
+                <div class="code-header">
+                    <span class="code-lang">CSS — align-items</span>
+                    <div class="code-dots"><span></span><span></span><span></span></div>
+                </div>
+<pre><code><span class="selector">.hero</span> <span class="punctuation">{</span>
+    <span class="flex-prop">display</span><span class="punctuation">:</span> <span class="css-value">flex</span><span class="punctuation">;</span>
+    <span class="flex-prop">align-items</span><span class="punctuation">:</span> <span class="css-value">center</span><span class="punctuation">;</span>
+    <span class="flex-prop">height</span><span class="punctuation">:</span> <span class="css-number">100</span><span class="css-unit">vh</span><span class="punctuation">;</span>
+<span class="punctuation">}</span>
+
+<span class="selector">.card-row</span> <span class="punctuation">{</span>
+    <span class="flex-prop">display</span><span class="punctuation">:</span> <span class="css-value">flex</span><span class="punctuation">;</span>
+    <span class="flex-prop">align-items</span><span class="punctuation">:</span> <span class="css-value">stretch</span><span class="punctuation">;</span> <span class="comment">/* كل الكاردز بنفس الارتفاع */</span>
+<span class="punctuation">}</span></code></pre>
+            </div>
+
+            <div class="success-box">
+                <h4>✨ التوسيط الكامل بـ Flexbox</h4>
+                <p>عشان توسط عنصر أفقياً ورأسياً:</p>
+                <p style="margin-top: 10px; font-family: 'Fira Code', monospace; direction: ltr; text-align: left; background: var(--bg-code); padding: 15px; border-radius: 8px; font-size: 0.9rem; line-height: 1.8;">
+                    <span style="color: #8B2252;">.centered</span> {<br>
+                    &nbsp;&nbsp;<span style="color: #E06C75;">display</span>: <span style="color: #116329;">flex</span>;<br>
+                    &nbsp;&nbsp;<span style="color: #E06C75;">justify-content</span>: <span style="color: #116329;">center</span>;<br>
+                    &nbsp;&nbsp;<span style="color: #E06C75;">align-items</span>: <span style="color: #116329;">center</span>;<br>
+                    &nbsp;&nbsp;<span style="color: #E06C75;">height</span>: <span style="color: #0550AE;">100</span><span style="color: #953800;">vh</span>;<br>
+                    }
+                </p>
+            </div>
+        </section>
+
+        <!-- ========== align-self ========== -->
+        <section>
+            <h2 class="section-title">
+                <div class="title-icon">🎯</div>
+                <span>align-self — محاذاة فردية</span>
+            </h2>
+
+            <div class="card">
+                <h3>📖 التحكم في عنصر واحد</h3>
+                <p><code class="inline">align-self</code> بيخليك تتحكم في محاذاة <strong>عنصر واحد</strong> على Cross Axis، بشكل مستقل عن باقي العناصر.</p>
+            </div>
+
+            <div class="flex-demo">
+                <h4>📊 align-self على عنصر واحد</h4>
+                <div class="flex-label">Item 2 عنده align-self: flex-end;</div>
+                <div class="flex-container" style="align-items: flex-start; height: 150px;">
+                    <div class="flex-item">1</div>
+                    <div class="flex-item" style="align-self: flex-end;">2</div>
+                    <div class="flex-item">3</div>
+                </div>
+            </div>
+
+            <div class="code-wrapper">
+                <div class="code-header">
+                    <span class="code-lang">CSS — align-self</span>
+                    <div class="code-dots"><span></span><span></span><span></span></div>
+                </div>
+<pre><code><span class="selector">.container</span> <span class="punctuation">{</span>
+    <span class="flex-prop">display</span><span class="punctuation">:</span> <span class="css-value">flex</span><span class="punctuation">;</span>
+    <span class="flex-prop">align-items</span><span class="punctuation">:</span> <span class="css-value">center</span><span class="punctuation">;</span>
+<span class="punctuation">}</span>
+
+<span class="selector">.special-item</span> <span class="punctuation">{</span>
+    <span class="flex-prop">align-self</span><span class="punctuation">:</span> <span class="css-value">flex-end</span><span class="punctuation">;</span> <span class="comment">/* هينزل لتحت */</span>
+<span class="punctuation">}</span></code></pre>
+            </div>
+        </section>
+
+        <!-- ========== flex-wrap ========== -->
+        <section>
+            <h2 class="section-title">
+                <div class="title-icon">🔄</div>
+                <span>flex-wrap — التفاف العناصر</span>
+            </h2>
+
+            <div class="card">
+                <h3>📖 إزاي العناصر تلتف؟</h3>
+                <p>افتراضياً، العناصر بتحاول تفضل في سطر واحد حتى لو طلعت بره الـ Container. <code class="inline">flex-wrap</code> بيخليها تنزل لسطر تاني.</p>
+            </div>
+
+            <div class="tag-grid">
+                <div class="tag-card">
+                    <span class="tag-name">nowrap</span>
+                    <h5>بدون التفاف (الافتراضي)</h5>
+                    <p>كل العناصر في سطر واحد حتى لو طلعت بره.</p>
+                </div>
+                <div class="tag-card">
+                    <span class="tag-name">wrap</span>
+                    <h5>التفاف</h5>
+                    <p>العناصر بتنزل لسطر تاني لو مفيش مساحة.</p>
+                </div>
+                <div class="tag-card">
+                    <span class="tag-name">wrap-reverse</span>
+                    <h5>التفاف معكوس</h5>
+                    <p>السطور الجديدة بتطلع فوق.</p>
+                </div>
+            </div>
+
+            <div class="flex-demo">
+                <h4>📊 flex-wrap: nowrap (الافتراضي)</h4>
+                <div class="flex-label">flex-wrap: nowrap;</div>
+                <div class="flex-container" style="flex-wrap: nowrap; overflow-x: auto;">
+                    <div class="flex-item" style="min-width: 150px;">1</div>
+                    <div class="flex-item" style="min-width: 150px;">2</div>
+                    <div class="flex-item" style="min-width: 150px;">3</div>
+                    <div class="flex-item" style="min-width: 150px;">4</div>
+                    <div class="flex-item" style="min-width: 150px;">5</div>
+                </div>
+            </div>
+
+            <div class="flex-demo">
+                <h4>📊 flex-wrap: wrap</h4>
+                <div class="flex-label">flex-wrap: wrap;</div>
+                <div class="flex-container" style="flex-wrap: wrap;">
+                    <div class="flex-item" style="min-width: 150px;">1</div>
+                    <div class="flex-item" style="min-width: 150px;">2</div>
+                    <div class="flex-item" style="min-width: 150px;">3</div>
+                    <div class="flex-item" style="min-width: 150px;">4</div>
+                    <div class="flex-item" style="min-width: 150px;">5</div>
+                </div>
+            </div>
+
+            <div class="code-wrapper">
+                <div class="code-header">
+                    <span class="code-lang">CSS — flex-wrap</span>
+                    <div class="code-dots"><span></span><span></span><span></span></div>
+                </div>
+<pre><code><span class="selector">.cards-container</span> <span class="punctuation">{</span>
+    <span class="flex-prop">display</span><span class="punctuation">:</span> <span class="css-value">flex</span><span class="punctuation">;</span>
+    <span class="flex-prop">flex-wrap</span><span class="punctuation">:</span> <span class="css-value">wrap</span><span class="punctuation">;</span>
+<span class="punctuation">}</span>
+
+<span class="comment">/* Shorthand: flex-flow */</span>
+<span class="selector">.container</span> <span class="punctuation">{</span>
+    <span class="flex-prop">flex-flow</span><span class="punctuation">:</span> <span class="css-value">row wrap</span><span class="punctuation">;</span> <span class="comment">/* direction + wrap */</span>
+<span class="punctuation">}</span></code></pre>
+            </div>
+        </section>
+
+        <!-- ========== gap ========== -->
+        <section>
+            <h2 class="section-title">
+                <div class="title-icon">📐</div>
+                <span>gap — المسافات بين العناصر</span>
+            </h2>
+
+            <div class="card">
+                <h3>📖 المسافات بسهولة</h3>
+                <p><code class="inline">gap</code> بيضيف مسافة <strong>بين العناصر</strong> مباشرة، من غير ما نحتاج نستخدم margin.</p>
+            </div>
+
+            <div class="flex-demo">
+                <h4>📊 gap: 10px</h4>
+                <div class="flex-label">gap: 10px;</div>
+                <div class="flex-container" style="gap: 10px;">
+                    <div class="flex-item">1</div>
+                    <div class="flex-item">2</div>
+                    <div class="flex-item">3</div>
+                </div>
+            </div>
+
+            <div class="flex-demo">
+                <h4>📊 gap: 30px</h4>
+                <div class="flex-label">gap: 30px;</div>
+                <div class="flex-container" style="gap: 30px;">
+                    <div class="flex-item">1</div>
+                    <div class="flex-item">2</div>
+                    <div class="flex-item">3</div>
+                </div>
+            </div>
+
+            <div class="flex-demo">
+                <h4>📊 row-gap و column-gap</h4>
+                <div class="flex-label">row-gap: 20px; column-gap: 40px;</div>
+                <div class="flex-container" style="flex-wrap: wrap; row-gap: 20px; column-gap: 40px;">
+                    <div class="flex-item" style="min-width: 150px;">1</div>
+                    <div class="flex-item" style="min-width: 150px;">2</div>
+                    <div class="flex-item" style="min-width: 150px;">3</div>
+                    <div class="flex-item" style="min-width: 150px;">4</div>
+                </div>
+            </div>
+
+            <div class="code-wrapper">
+                <div class="code-header">
+                    <span class="code-lang">CSS — gap</span>
+                    <div class="code-dots"><span></span><span></span><span></span></div>
+                </div>
+<pre><code><span class="selector">.container</span> <span class="punctuation">{</span>
+    <span class="flex-prop">display</span><span class="punctuation">:</span> <span class="css-value">flex</span><span class="punctuation">;</span>
+    <span class="flex-prop">gap</span><span class="punctuation">:</span> <span class="css-number">20</span><span class="css-unit">px</span><span class="punctuation">;</span> <span class="comment">/* نفس المسافة في كل الاتجاهات */</span>
+<span class="punctuation">}</span>
+
+<span class="selector">.grid</span> <span class="punctuation">{</span>
+    <span class="flex-prop">display</span><span class="punctuation">:</span> <span class="css-value">flex</span><span class="punctuation">;</span>
+    <span class="flex-prop">flex-wrap</span><span class="punctuation">:</span> <span class="css-value">wrap</span><span class="punctuation">;</span>
+    <span class="flex-prop">row-gap</span><span class="punctuation">:</span> <span class="css-number">20</span><span class="css-unit">px</span><span class="punctuation">;</span>
+    <span class="flex-prop">column-gap</span><span class="punctuation">:</span> <span class="css-number">30</span><span class="css-unit">px</span><span class="punctuation">;</span>
+<span class="punctuation">}</span></code></pre>
+            </div>
+
+            <div class="success-box">
+                <h4>✅ ليه gap أفضل من margin؟</h4>
+                <p>1. <strong>أنظف:</strong> مش محتاج تضيف margin لكل عنصر.</p>
+                <p>2. <strong>أدق:</strong> مفيش مسافات زيادة في البداية أو النهاية.</p>
+                <p>3. <strong>أسهل:</strong> سطر واحد بس بدل ما تحسب margins.</p>
+            </div>
+        </section>
+
+        <!-- ========== flex-grow, shrink, basis ========== -->
+        <section>
+            <h2 class="section-title">
+                <div class="title-icon">📊</div>
+                <span>flex-grow, flex-shrink, flex-basis</span>
+            </h2>
+
+            <div class="card">
+                <h3>📖 التحكم في حجم العناصر</h3>
+                <p>ثلاث properties بتتحكم في حجم كل Flex Item:</p>
+            </div>
+
+            <div class="tag-grid">
+                <div class="tag-card">
+                    <span class="tag-name">flex-grow</span>
+                    <h5>النمو</h5>
+                    <p>إزاي العنصر بيكبر لو في مساحة فاضية. الافتراضي: 0 (مش بيكبر).</p>
+                </div>
+                <div class="tag-card">
+                    <span class="tag-name">flex-shrink</span>
+                    <h5>الانكماش</h5>
+                    <p>إزاي العنصر بيصغر لو مفيش مساحة كافية. الافتراضي: 1 (بيصغر).</p>
+                </div>
+                <div class="tag-card">
+                    <span class="tag-name">flex-basis</span>
+                    <h5>الحجم الأساسي</h5>
+                    <p>حجم العنصر قبل ما يبدأ ينمو أو ينكمش. بديل لـ width.</p>
+                </div>
+            </div>
+
+            <div class="flex-demo">
+                <h4>📊 flex-grow: 1 على كل العناصر</h4>
+                <div class="flex-label">كل العناصر هتكبر بالتساوي</div>
+                <div class="flex-container">
+                    <div class="flex-item" style="flex-grow: 1;">1</div>
+                    <div class="flex-item" style="flex-grow: 1;">2</div>
+                    <div class="flex-item" style="flex-grow: 1;">3</div>
+                </div>
+            </div>
+
+            <div class="flex-demo">
+                <h4>📊 flex-grow: 1, 2, 3</h4>
+                <div class="flex-label">Item 2 هيكبر ضعف Item 1، و Item 3 ثلاثة أضعاف</div>
+                <div class="flex-container">
+                    <div class="flex-item" style="flex-grow: 1;">1</div>
+                    <div class="flex-item" style="flex-grow: 2;">2</div>
+                    <div class="flex-item" style="flex-grow: 3;">3</div>
+                </div>
+            </div>
+
+            <div class="code-wrapper">
+                <div class="code-header">
+                    <span class="code-lang">CSS — flex properties</span>
+                    <div class="code-dots"><span></span><span></span><span></span></div>
+                </div>
+<pre><code><span class="comment">/* flex-grow */</span>
+<span class="selector">.item</span> <span class="punctuation">{</span>
+    <span class="flex-prop">flex-grow</span><span class="punctuation">:</span> <span class="css-number">1</span><span class="punctuation">;</span> <span class="comment">/* بيكبر لو في مساحة */</span>
+<span class="punctuation">}</span>
+
+<span class="comment">/* flex-shrink */</span>
+<span class="selector">.item</span> <span class="punctuation">{</span>
+    <span class="flex-prop">flex-shrink</span><span class="punctuation">:</span> <span class="css-number">0</span><span class="punctuation">;</span> <span class="comment">/* مش بيصغر */</span>
+<span class="punctuation">}</span>
+
+<span class="comment">/* flex-basis */</span>
+<span class="selector">.item</span> <span class="punctuation">{</span>
+    <span class="flex-prop">flex-basis</span><span class="punctuation">:</span> <span class="css-number">200</span><span class="css-unit">px</span><span class="punctuation">;</span> <span class="comment">/* الحجم الابتدائي */</span>
+<span class="punctuation">}</span>
+
+<span class="comment">/* Shorthand: flex */</span>
+<span class="selector">.item</span> <span class="punctuation">{</span>
+    <span class="flex-prop">flex</span><span class="punctuation">:</span> <span class="css-number">1</span> <span class="css-number">0</span> <span class="css-number">200</span><span class="css-unit">px</span><span class="punctuation">;</span> <span class="comment">/* grow shrink basis */</span>
+<span class="punctuation">}</span></code></pre>
+            </div>
+
+            <div class="info-box">
+                <h4>💡 flex shorthand</h4>
+                <p><code class="inline">flex: 1</code> = <code class="inline">flex-grow: 1; flex-shrink: 1; flex-basis: 0%</code></p>
+                <p>ده بيخلي العنصر يكبر بالتساوي مع باقي العناصر اللي عندها نفس القيمة.</p>
+            </div>
+        </section>
+
+        <!-- ========== order ========== -->
+        <section>
+            <h2 class="section-title">
+                <div class="title-icon">🔢</div>
+                <span>order — ترتيب العناصر</span>
+            </h2>
+
+            <div class="card">
+                <h3>📖 تغيير الترتيب بدون تغيير HTML</h3>
+                <p><code class="inline">order</code> بيخليك تغير ترتيب العناصر بصرياً من غير ما تغير كود HTML.</p>
+            </div>
+
+            <div class="flex-demo">
+                <h4>📊 order: تغيير الترتيب</h4>
+                <div class="flex-label">HTML: 1, 2, 3 — CSS: order: 2, 0, 1</div>
+                <div class="flex-container">
+                    <div class="flex-item" style="order: 2;">1 (order: 2)</div>
+                    <div class="flex-item" style="order: 0;">2 (order: 0)</div>
+                    <div class="flex-item" style="order: 1;">3 (order: 1)</div>
+                </div>
+                <p style="text-align: center; color: var(--text-muted); margin-top: 10px;">الترتيب الفعلي: 2 → 3 → 1</p>
+            </div>
+
+            <div class="code-wrapper">
+                <div class="code-header">
+                    <span class="code-lang">CSS — order</span>
+                    <div class="code-dots"><span></span><span></span><span></span></div>
+                </div>
+<pre><code><span class="selector">.first</span> <span class="punctuation">{</span> <span class="flex-prop">order</span><span class="punctuation">:</span> <span class="css-number">2</span><span class="punctuation">;</span> <span class="punctuation">}</span>
+<span class="selector">.second</span> <span class="punctuation">{</span> <span class="flex-prop">order</span><span class="punctuation">:</span> <span class="css-number">0</span><span class="punctuation">;</span> <span class="punctuation">}</span> <span class="comment">/* الافتراضي */</span>
+<span class="selector">.third</span> <span class="punctuation">{</span> <span class="flex-prop">order</span><span class="punctuation">:</span> <span class="css-number">1</span><span class="punctuation">;</span> <span class="punctuation">}</span>
+
+<span class="comment">/* الأرقام السالبة مسموحة */</span>
+<span class="selector">.important</span> <span class="punctuation">{</span> <span class="flex-prop">order</span><span class="punctuation">:</span> <span class="css-number">-1</span><span class="punctuation">;</span> <span class="comment">/* يروح الأول */</span> <span class="punctuation">}</span></code></pre>
+            </div>
+
+            <div class="warning-box">
+                <h4>⚠️ تحذير</h4>
+                <p>متستخدمش <code class="inline">order</code> عشان تخفي محتوى مهم. القراءات الصوتية (Accessibility) بتقرأ الترتيب من HTML، مش من CSS.</p>
+            </div>
+        </section>
+
+        <!-- ========== Practical Applications ========== -->
+        <section>
+            <h2 class="section-title">
+                <div class="title-icon">💼</div>
+                <span>تطبيقات عملية</span>
+            </h2>
+
+            <!-- Navigation -->
+            <div class="card">
+                <h3>🔹 1. Navigation Bar</h3>
+                <p>استخدام شائع جداً: Navbar مع Logo على اليمين و Links على الشمال.</p>
+            </div>
+
+            <div class="code-wrapper">
+                <div class="code-header">
+                    <span class="code-lang">CSS — Navbar</span>
+                    <div class="code-dots"><span></span><span></span><span></span></div>
+                </div>
+<pre><code><span class="selector">.navbar</span> <span class="punctuation">{</span>
+    <span class="flex-prop">display</span><span class="punctuation">:</span> <span class="css-value">flex</span><span class="punctuation">;</span>
+    <span class="flex-prop">justify-content</span><span class="punctuation">:</span> <span class="css-value">space-between</span><span class="punctuation">;</span>
+    <span class="flex-prop">align-items</span><span class="punctuation">:</span> <span class="css-value">center</span><span class="punctuation">;</span>
+    <span class="flex-prop">padding</span><span class="punctuation">:</span> <span class="css-number">1</span><span class="css-unit">rem</span> <span class="css-number">2</span><span class="css-unit">rem</span><span class="punctuation">;</span>
+    <span class="flex-prop">background</span><span class="punctuation">:</span> <span class="css-color-val">#4A7C59</span><span class="punctuation">;</span>
+<span class="punctuation">}</span>
+
+<span class="selector">.nav-links</span> <span class="punctuation">{</span>
+    <span class="flex-prop">display</span><span class="punctuation">:</span> <span class="css-value">flex</span><span class="punctuation">;</span>
+    <span class="flex-prop">gap</span><span class="punctuation">:</span> <span class="css-number">2</span><span class="css-unit">rem</span><span class="punctuation">;</span>
+    <span class="flex-prop">list-style</span><span class="punctuation">:</span> <span class="css-value">none</span><span class="punctuation">;</span>
+<span class="punctuation">}</span></code></pre>
+            </div>
+
+            <!-- Cards Layout -->
+            <div class="card">
+                <h3>🔹 2. Cards Layout</h3>
+                <p>Cards متجاوبة بتستخدم flex-wrap.</p>
+            </div>
+
+            <div class="code-wrapper">
+                <div class="code-header">
+                    <span class="code-lang">CSS — Cards</span>
+                    <div class="code-dots"><span></span><span></span><span></span></div>
+                </div>
+<pre><code><span class="selector">.cards-container</span> <span class="punctuation">{</span>
+    <span class="flex-prop">display</span><span class="punctuation">:</span> <span class="css-value">flex</span><span class="punctuation">;</span>
+    <span class="flex-prop">flex-wrap</span><span class="punctuation">:</span> <span class="css-value">wrap</span><span class="punctuation">;</span>
+    <span class="flex-prop">gap</span><span class="punctuation">:</span> <span class="css-number">2</span><span class="css-unit">rem</span><span class="punctuation">;</span>
+    <span class="flex-prop">justify-content</span><span class="punctuation">:</span> <span class="css-value">center</span><span class="punctuation">;</span>
+<span class="punctuation">}</span>
+
+<span class="selector">.card</span> <span class="punctuation">{</span>
+    <span class="flex-prop">flex</span><span class="punctuation">:</span> <span class="css-number">1</span> <span class="css-number">1</span> <span class="css-number">300</span><span class="css-unit">px</span><span class="punctuation">;</span> <span class="comment">/* grow shrink basis */</span>
+    <span class="flex-prop">max-width</span><span class="punctuation">:</span> <span class="css-number">400</span><span class="css-unit">px</span><span class="punctuation">;</span>
+<span class="punctuation">}</span></code></pre>
+            </div>
+
+            <!-- Centering -->
+            <div class="card">
+                <h3>🔹 3. Centering (التوسيط)</h3>
+                <p>أسهل طريقة لتوسيط عنصر أفقياً ورأسياً.</p>
+            </div>
+
+            <div class="code-wrapper">
+                <div class="code-header">
+                    <span class="code-lang">CSS — Centering</span>
+                    <div class="code-dots"><span></span><span></span><span></span></div>
+                </div>
+<pre><code><span class="comment">/* التوسيط الكامل */</span>
+<span class="selector">.centered</span> <span class="punctuation">{</span>
+    <span class="flex-prop">display</span><span class="punctuation">:</span> <span class="css-value">flex</span><span class="punctuation">;</span>
+    <span class="flex-prop">justify-content</span><span class="punctuation">:</span> <span class="css-value">center</span><span class="punctuation">;</span>
+    <span class="flex-prop">align-items</span><span class="punctuation">:</span> <span class="css-value">center</span><span class="punctuation">;</span>
+    <span class="flex-prop">height</span><span class="punctuation">:</span> <span class="css-number">100</span><span class="css-unit">vh</span><span class="punctuation">;</span>
+<span class="punctuation">}</span>
+
+<span class="comment">/* توسيط أفقي فقط */</span>
+<span class="selector">.centered-h</span> <span class="punctuation">{</span>
+    <span class="flex-prop">display</span><span class="punctuation">:</span> <span class="css-value">flex</span><span class="punctuation">;</span>
+    <span class="flex-prop">justify-content</span><span class="punctuation">:</span> <span class="css-value">center</span><span class="punctuation">;</span>
+<span class="punctuation">}</span></code></pre>
+            </div>
+
+            <!-- Holy Grail Layout -->
+            <div class="card">
+                <h3>🔹 4. Holy Grail Layout</h3>
+                <p>Layout كلاسيكي: Header + Main (مع Sidebar) + Footer.</p>
+            </div>
+
+            <div class="code-wrapper">
+                <div class="code-header">
+                    <span class="code-lang">CSS — Holy Grail</span>
+                    <div class="code-dots"><span></span><span></span><span></span></div>
+                </div>
+<pre><code><span class="selector">body</span> <span class="punctuation">{</span>
+    <span class="flex-prop">display</span><span class="punctuation">:</span> <span class="css-value">flex</span><span class="punctuation">;</span>
+    <span class="flex-prop">flex-direction</span><span class="punctuation">:</span> <span class="css-value">column</span><span class="punctuation">;</span>
+    <span class="flex-prop">min-height</span><span class="punctuation">:</span> <span class="css-number">100</span><span class="css-unit">vh</span><span class="punctuation">;</span>
+<span class="punctuation">}</span>
+
+<span class="selector">header, footer</span> <span class="punctuation">{</span>
+    <span class="flex-prop">flex</span><span class="punctuation">:</span> <span class="css-number">0</span> <span class="css-number">0</span> <span class="css-value">auto</span><span class="punctuation">;</span> <span class="comment">/* حجم ثابت */</span>
+<span class="punctuation">}</span>
+
+<span class="selector">main</span> <span class="punctuation">{</span>
+    <span class="flex-prop">flex</span><span class="punctuation">:</span> <span class="css-number">1</span><span class="punctuation">;</span> <span class="comment">/* بياخد المساحة الفاضية */</span>
+    <span class="flex-prop">display</span><span class="punctuation">:</span> <span class="css-value">flex</span><span class="punctuation">;</span>
+<span class="punctuation">}</span>
+
+<span class="selector">.sidebar</span> <span class="punctuation">{</span>
+    <span class="flex-prop">flex</span><span class="punctuation">:</span> <span class="css-number">0</span> <span class="css-number">0</span> <span class="css-number">250</span><span class="css-unit">px</span><span class="punctuation">;</span> <span class="comment">/* عرض ثابت */</span>
+<span class="punctuation">}</span>
+
+<span class="selector">.content</span> <span class="punctuation">{</span>
+    <span class="flex-prop">flex</span><span class="punctuation">:</span> <span class="css-number">1</span><span class="punctuation">;</span> <span class="comment">/* بياخد المساحة الفاضية */</span>
+<span class="punctuation">}</span></code></pre>
+            </div>
+        </section>
+
+        <!-- ========== Flexbox Summary Table ========== -->
+        <section>
+            <h2 class="section-title">
+                <div class="title-icon">📋</div>
+                <span>ملخص Flexbox Properties</span>
+            </h2>
+
+            <div class="card">
+                <h3>📊 Container Properties</h3>
+                <table class="element-table">
+                    <thead>
+                        <tr>
+                            <th>Property</th>
+                            <th>الوظيفة</th>
+                            <th>القيم</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>display</code></td>
+                            <td>تفعيل Flexbox</td>
+                            <td>flex, inline-flex</td>
+                        </tr>
+                        <tr>
+                            <td><code>flex-direction</code></td>
+                            <td>اتجاه الترتيب</td>
+                            <td>row, row-reverse, column, column-reverse</td>
+                        </tr>
+                        <tr>
+                            <td><code>justify-content</code></td>
+                            <td>محاذاة على Main Axis</td>
+                            <td>flex-start, flex-end, center, space-between, space-around, space-evenly</td>
+                        </tr>
+                        <tr>
+                            <td><code>align-items</code></td>
+                            <td>محاذاة على Cross Axis</td>
+                            <td>stretch, flex-start, flex-end, center, baseline</td>
+                        </tr>
+                        <tr>
+                            <td><code>flex-wrap</code></td>
+                            <td>التفاف العناصر</td>
+                            <td>nowrap, wrap, wrap-reverse</td>
+                        </tr>
+                        <tr>
+                            <td><code>gap</code></td>
+                            <td>المسافة بين العناصر</td>
+                            <td>أي قيمة (px, rem, %)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card">
+                <h3>📊 Item Properties</h3>
+                <table class="element-table">
+                    <thead>
+                        <tr>
+                            <th>Property</th>
+                            <th>الوظيفة</th>
+                            <th>القيم</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>flex-grow</code></td>
+                            <td>معامل النمو</td>
+                            <td>رقم (0, 1, 2, ...)</td>
+                        </tr>
+                        <tr>
+                            <td><code>flex-shrink</code></td>
+                            <td>معامل الانكماش</td>
+                            <td>رقم (0, 1, 2, ...)</td>
+                        </tr>
+                        <tr>
+                            <td><code>flex-basis</code></td>
+                            <td>الحجم الأساسي</td>
+                            <td>auto, px, %, rem</td>
+                        </tr>
+                        <tr>
+                            <td><code>flex</code></td>
+                            <td>Shorthand</td>
+                            <td>grow shrink basis</td>
+                        </tr>
+                        <tr>
+                            <td><code>align-self</code></td>
+                            <td>محاذاة فردية</td>
+                            <td>auto, flex-start, flex-end, center, stretch, baseline</td>
+                        </tr>
+                        <tr>
+                            <td><code>order</code></td>
+                            <td>ترتيب العنصر</td>
+                            <td>رقم (سالب أو موجب)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- ========== Debugging Activity ========== -->
+        <section>
+            <h2 class="section-title">
+                <div class="title-icon">🐛</div>
+                <span>Debugging — اكتشف الأخطاء</span>
+            </h2>
+
+            <div class="debug-box">
+                <h3>🔍 نشاط: اكتشف الأخطاء في CSS ده</h3>
+                <p style="color: #5C2828;">الكود ده فيه <strong>5 أخطاء شائعة</strong> في Flexbox.</p>
+
+                <div class="code-wrapper">
+                    <div class="code-header">
+                        <span class="code-lang">CSS — كود فيه أخطاء ❌</span>
+                        <div class="code-dots"><span></span><span></span><span></span></div>
+                    </div>
+<pre><code><span class="selector">.container</span> <span class="punctuation">{</span>
+    <span class="flex-prop">display</span><span class="punctuation">:</span> <span class="css-value">flexbox</span><span class="punctuation">;</span>
+    <span class="flex-prop">flex-direction</span><span class="punctuation">:</span> <span class="css-value">horizontal</span><span class="punctuation">;</span>
+    <span class="flex-prop">justify-content</span><span class="punctuation">:</span> <span class="css-value">middle</span><span class="punctuation">;</span>
+    <span class="flex-prop">align-items</span><span class="punctuation">:</span> <span class="css-value">middle</span><span class="punctuation">;</span>
+    <span class="flex-prop">gap</span><span class="punctuation">:</span> <span class="css-number">20</span><span class="punctuation">;</span>
+<span class="punctuation">}</span>
+
+<span class="selector">.item</span> <span class="punctuation">{</span>
+    <span class="flex-prop">flex-size</span><span class="punctuation">:</span> <span class="css-number">1</span><span class="punctuation">;</span>
+<span class="punctuation">}</span></code></pre>
+                </div>
+
+                <div class="debug-comparison">
+                    <div class="debug-wrong">
+                        <div class="debug-label">❌ الأخطاء</div>
+                        <pre><code style="font-size: 0.85rem;">1. display: flexbox ❌
+2. flex-direction: horizontal ❌
+3. justify-content: middle ❌
+4. align-items: middle ❌
+5. gap: 20 (بدون وحدة) ❌
+6. flex-size مش موجود ❌</code></pre>
+                    </div>
+                    <div class="debug-right">
+                        <div class="debug-label">✅ الكود الصحيح</div>
+                        <pre><code style="font-size: 0.85rem;"><span class="selector">.container</span> <span class="punctuation">{</span>
+  <span class="flex-prop">display</span>: <span class="css-value">flex</span>;
+  <span class="flex-prop">flex-direction</span>: <span class="css-value">row</span>;
+  <span class="flex-prop">justify-content</span>: <span class="css-value">center</span>;
+  <span class="flex-prop">align-items</span>: <span class="css-value">center</span>;
+  <span class="flex-prop">gap</span>: <span class="css-number">20</span><span class="css-unit">px</span>;
+<span class="punctuation">}</span>
+<span class="selector">.item</span> <span class="punctuation">{</span>
+  <span class="flex-prop">flex-grow</span>: <span class="css-number">1</span>;
+<span class="punctuation">}</span></code></pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========== Mini Project ========== -->
+        <section>
+            <h2 class="section-title">
+                <div class="title-icon">🎨</div>
+                <span>مشروع المحاضرة: Navigation + Cards Layout</span>
+            </h2>
+
+            <div class="card">
+                <h3>📋 المطلوب</h3>
+                <p>ابني صفحة تحتوي على:</p>
+                <ul style="list-style: none; padding-right: 0; margin-top: 15px;">
+                    <li style="padding: 8px 0; padding-right: 25px; position: relative; color: var(--text-body);"><span style="position: absolute; right: 0; color: var(--success); font-weight: 900;">✓</span> Navbar بـ Flexbox (logo + links)</li>
+                    <li style="padding: 8px 0; padding-right: 25px; position: relative; color: var(--text-body);"><span style="position: absolute; right: 0; color: var(--success); font-weight: 900;">✓</span> Hero Section مع توسيط كامل</li>
+                    <li style="padding: 8px 0; padding-right: 25px; position: relative; color: var(--text-body);"><span style="position: absolute; right: 0; color: var(--success); font-weight: 900;">✓</span> Cards Layout بـ flex-wrap</li>
+                    <li style="padding: 8px 0; padding-right: 25px; position: relative; color: var(--text-body);"><span style="position: absolute; right: 0; color: var(--success); font-weight: 900;">✓</span> استخدام gap بدلاً من margin</li>
+                    <li style="padding: 8px 0; padding-right: 25px; position: relative; color: var(--text-body);"><span style="position: absolute; right: 0; color: var(--success); font-weight: 900;">✓</span> استخدام flex-grow و flex-basis</li>
+                    <li style="padding: 8px 0; padding-right: 25px; position: relative; color: var(--text-body);"><span style="position: absolute; right: 0; color: var(--success); font-weight: 900;">✓</span> Footer بـ Flexbox</li>
+                </ul>
+            </div>
+
+            <div class="code-wrapper">
+                <div class="code-header">
+                    <span class="code-lang">index.html</span>
+                    <div class="code-dots"><span></span><span></span><span></span></div>
+                </div>
+<pre><code><span class="doctype">&lt;!DOCTYPE html&gt;</span>
+<span class="tag">&lt;html</span> <span class="attr">lang</span>=<span class="value">"ar"</span> <span class="attr">dir</span>=<span class="value">"rtl"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;head&gt;</span>
+    <span class="tag">&lt;meta</span> <span class="attr">charset</span>=<span class="value">"UTF-8"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;meta</span> <span class="attr">name</span>=<span class="value">"viewport"</span> <span class="attr">content</span>=<span class="value">"width=device-width, initial-scale=1.0"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;title&gt;</span><span class="text">معرض المنتجات</span><span class="tag">&lt;/title&gt;</span>
+    <span class="tag">&lt;link</span> <span class="attr">rel</span>=<span class="value">"stylesheet"</span> <span class="attr">href</span>=<span class="value">"css/style.css"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;/head&gt;</span>
+<span class="tag">&lt;body&gt;</span>
+
+    <span class="comment">&lt;!-- Navbar --&gt;</span>
+    <span class="tag">&lt;nav</span> <span class="attr">class</span>=<span class="value">"navbar"</span><span class="tag">&gt;</span>
+        <span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="value">"logo"</span><span class="tag">&gt;</span><span class="text">🛍️ متجري</span><span class="tag">&lt;/div&gt;</span>
+        <span class="tag">&lt;ul</span> <span class="attr">class</span>=<span class="value">"nav-links"</span><span class="tag">&gt;</span>
+            <span class="tag">&lt;li&gt;</span><span class="tag">&lt;a</span> <span class="attr">href</span>=<span class="value">"#"</span><span class="tag">&gt;</span><span class="text">الرئيسية</span><span class="tag">&lt;/a&gt;</span><span class="tag">&lt;/li&gt;</span>
+            <span class="tag">&lt;li&gt;</span><span class="tag">&lt;a</span> <span class="attr">href</span>=<span class="value">"#products"</span><span class="tag">&gt;</span><span class="text">المنتجات</span><span class="tag">&lt;/a&gt;</span><span class="tag">&lt;/li&gt;</span>
+            <span class="tag">&lt;li&gt;</span><span class="tag">&lt;a</span> <span class="attr">href</span>=<span class="value">"#about"</span><span class="tag">&gt;</span><span class="text">عن المتجر</span><span class="tag">&lt;/a&gt;</span><span class="tag">&lt;/li&gt;</span>
+            <span class="tag">&lt;li&gt;</span><span class="tag">&lt;a</span> <span class="attr">href</span>=<span class="value">"#contact"</span><span class="tag">&gt;</span><span class="text">تواصل</span><span class="tag">&lt;/a&gt;</span><span class="tag">&lt;/li&gt;</span>
+        <span class="tag">&lt;/ul&gt;</span>
+    <span class="tag">&lt;/nav&gt;</span>
+
+    <span class="comment">&lt;!-- Hero --&gt;</span>
+    <span class="tag">&lt;section</span> <span class="attr">class</span>=<span class="value">"hero"</span><span class="tag">&gt;</span>
+        <span class="tag">&lt;h1&gt;</span><span class="text">أهلاً بيك في متجرنا</span><span class="tag">&lt;/h1&gt;</span>
+        <span class="tag">&lt;p&gt;</span><span class="text">أفضل المنتجات بأفضل الأسعار</span><span class="tag">&lt;/p&gt;</span>
+        <span class="tag">&lt;button</span> <span class="attr">class</span>=<span class="value">"btn"</span><span class="tag">&gt;</span><span class="text">تسوق الآن</span><span class="tag">&lt;/button&gt;</span>
+    <span class="tag">&lt;/section&gt;</span>
+
+    <span class="comment">&lt;!-- Products --&gt;</span>
+    <span class="tag">&lt;section</span> <span class="attr">id</span>=<span class="value">"products"</span> <span class="attr">class</span>=<span class="value">"products-section"</span><span class="tag">&gt;</span>
+        <span class="tag">&lt;h2&gt;</span><span class="text">منتجاتنا</span><span class="tag">&lt;/h2&gt;</span>
+        <span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="value">"cards-container"</span><span class="tag">&gt;</span>
+            <span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="value">"card"</span><span class="tag">&gt;</span>
+                <span class="tag">&lt;h3&gt;</span><span class="text">منتج 1</span><span class="tag">&lt;/h3&gt;</span>
+                <span class="tag">&lt;p&gt;</span><span class="text">وصف المنتج الأول</span><span class="tag">&lt;/p&gt;</span>
+                <span class="tag">&lt;span</span> <span class="attr">class</span>=<span class="value">"price"</span><span class="tag">&gt;</span><span class="text">100 جنيه</span><span class="tag">&lt;/span&gt;</span>
+            <span class="tag">&lt;/div&gt;</span>
+            <span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="value">"card"</span><span class="tag">&gt;</span>
+                <span class="tag">&lt;h3&gt;</span><span class="text">منتج 2</span><span class="tag">&lt;/h3&gt;</span>
+                <span class="tag">&lt;p&gt;</span><span class="text">وصف المنتج الثاني</span><span class="tag">&lt;/p&gt;</span>
+                <span class="tag">&lt;span</span> <span class="attr">class</span>=<span class="value">"price"</span><span class="tag">&gt;</span><span class="text">150 جنيه</span><span class="tag">&lt;/span&gt;</span>
+            <span class="tag">&lt;/div&gt;</span>
+            <span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="value">"card"</span><span class="tag">&gt;</span>
+                <span class="tag">&lt;h3&gt;</span><span class="text">منتج 3</span><span class="tag">&lt;/h3&gt;</span>
+                <span class="tag">&lt;p&gt;</span><span class="text">وصف المنتج الثالث</span><span class="tag">&lt;/p&gt;</span>
+                <span class="tag">&lt;span</span> <span class="attr">class</span>=<span class="value">"price"</span><span class="tag">&gt;</span><span class="text">200 جنيه</span><span class="tag">&lt;/span&gt;</span>
+            <span class="tag">&lt;/div&gt;</span>
+        <span class="tag">&lt;/div&gt;</span>
+    <span class="tag">&lt;/section&gt;</span>
+
+    <span class="comment">&lt;!-- Footer --&gt;</span>
+    <span class="tag">&lt;footer</span> <span class="attr">class</span>=<span class="value">"footer"</span><span class="tag">&gt;</span>
+        <span class="tag">&lt;p&gt;</span><span class="text">© 2024 متجري. جميع الحقوق محفوظة.</span><span class="tag">&lt;/p&gt;</span>
+    <span class="tag">&lt;/footer&gt;</span>
+
+<span class="tag">&lt;/body&gt;</span>
+<span class="tag">&lt;/html&gt;</span></code></pre>
+            </div>
+
+            <div class="code-wrapper">
+                <div class="code-header">
+                    <span class="code-lang">css/style.css</span>
+                    <div class="code-dots"><span></span><span></span><span></span></div>
+                </div>
+<pre><code><span class="comment">/* ===== Reset ===== */</span>
+<span class="selector">*</span> <span class="punctuation">{</span>
+    <span class="property">margin</span><span class="punctuation">:</span> <span class="css-number">0</span><span class="punctuation">;</span>
+    <span class="property">padding</span><span class="punctuation">:</span> <span class="css-number">0</span><span class="punctuation">;</span>
+    <span class="property">box-sizing</span><span class="punctuation">:</span> <span class="css-value">border-box</span><span class="punctuation">;</span>
+<span class="punctuation">}</span>
+
+<span class="selector">body</span> <span class="punctuation">{</span>
+    <span class="property">font-family</span><span class="punctuation">:</span> <span class="css-value">'Cairo', sans-serif</span><span class="punctuation">;</span>
+    <span class="property">color</span><span class="punctuation">:</span> <span class="css-color-val">#4A3728</span><span class="punctuation">;</span>
+    <span class="property">line-height</span><span class="punctuation">:</span> <span class="css-number">1.6</span><span class="punctuation">;</span>
+<span class="punctuation">}</span>
+
+<span class="comment">/* ===== Navbar (Flexbox) ===== */</span>
+<span class="selector">.navbar</span> <span class="punctuation">{</span>
+    <span class="flex-prop">display</span><span class="punctuation">:</span> <span class="css-value">flex</span><span class="punctuation">;</span>
+    <span class="flex-prop">justify-content</span><span class="punctuation">:</span> <span class="css-value">space-between</span><span class="punctuation">;</span>
+    <span class="flex-prop">align-items</span><span class="punctuation">:</span> <span class="css-value">center</span><span class="punctuation">;</span>
+    <span class="property">padding</span><span class="punctuation">:</span> <span class="css-number">1</span><span class="css-unit">rem</span> <span class="css-number">2</span><span class="css-unit">rem</span><span class="punctuation">;</span>
+    <span class="property">background</span><span class="punctuation">:</span> <span class="css-color-val">#4A7C59</span><span class="punctuation">;</span>
+    <span class="property">color</span><span class="punctuation">:</span> <span class="css-value">white</span><span class="punctuation">;</span>
+    <span class="property">box-shadow</span><span class="punctuation">:</span> <span class="css-number">0</span> <span class="css-number">2</span><span class="css-unit">px</span> <span class="css-number">10</span><span class="css-unit">px</span> <span class="css-value">rgba(0,0,0,0.1)</span><span class="punctuation">;</span>
+<span class="punctuation">}</span>
+
+<span class="selector">.logo</span> <span class="punctuation">{</span>
+    <span class="property">font-size</span><span class="punctuation">:</span> <span class="css-number">1.5</span><span class="css-unit">rem</span><span class="punctuation">;</span>
+    <span class="property">font-weight</span><span class="punctuation">:</span> <span class="css-number">900</span><span class="punctuation">;</span>
+<span class="punctuation">}</span>
+
+<span class="selector">.nav-links</span> <span class="punctuation">{</span>
+    <span class="flex-prop">display</span><span class="punctuation">:</span> <span class="css-value">flex</span><span class="punctuation">;</span>
+    <span class="flex-prop">gap</span><span class="punctuation">:</span> <span class="css-number">2</span><span class="css-unit">rem</span><span class="punctuation">;</span>
+    <span class="property">list-style</span><span class="punctuation">:</span> <span class="css-value">none</span><span class="punctuation">;</span>
+<span class="punctuation">}</span>
+
+<span class="selector">.nav-links</span> <span class="selector">a</span> <span class="punctuation">{</span>
+    <span class="property">color</span><span class="punctuation">:</span> <span class="css-value">white</span><span class="punctuation">;</span>
+    <span class="property">text-decoration</span><span class="punctuation">:</span> <span class="css-value">none</span><span class="punctuation">;</span>
+    <span class="property">font-weight</span><span class="punctuation">:</span> <span class="css-number">600</span><span class="punctuation">;</span>
+    <span class="property">transition</span><span class="punctuation">:</span> <span class="css-value">opacity 0.3s</span><span class="punctuation">;</span>
+<span class="punctuation">}</span>
+
+<span class="selector">.nav-links</span> <span class="selector">a:hover</span> <span class="punctuation">{</span>
+    <span class="property">opacity</span><span class="punctuation">:</span> <span class="css-number">0.8</span><span class="punctuation">;</span>
+<span class="punctuation">}</span>
+
+<span class="comment">/* ===== Hero (Centered) ===== */</span>
+<span class="selector">.hero</span> <span class="punctuation">{</span>
+    <span class="flex-prop">display</span><span class="punctuation">:</span> <span class="css-value">flex</span><span class="punctuation">;</span>
+    <span class="flex-prop">flex-direction</span><span class="punctuation">:</span> <span class="css-value">column</span><span class="punctuation">;</span>
+    <span class="flex-prop">justify-content</span><span class="punctuation">:</span> <span class="css-value">center</span><span class="punctuation">;</span>
+    <span class="flex-prop">align-items</span><span class="punctuation">:</span> <span class="css-value">center</span><span class="punctuation">;</span>
+    <span class="flex-prop">text-align</span><span class="punctuation">:</span> <span class="css-value">center</span><span class="punctuation">;</span>
+    <span class="property">min-height</span><span class="punctuation">:</span> <span class="css-number">60</span><span class="css-unit">vh</span><span class="punctuation">;</span>
+    <span class="property">background</span><span class="punctuation">:</span> <span class="css-value">linear-gradient(135deg, #D4E5D8 0%, #E8C9A0 100%)</span><span class="punctuation">;</span>
+    <span class="property">padding</span><span class="punctuation">:</span> <span class="css-number">3</span><span class="css-unit">rem</span> <span class="css-number">2</span><span class="css-unit">rem</span><span class="punctuation">;</span>
+<span class="punctuation">}</span>
+
+<span class="selector">.hero</span> <span class="selector">h1</span> <span class="punctuation">{</span>
+    <span class="property">font-size</span><span class="punctuation">:</span> <span class="css-number">3</span><span class="css-unit">rem</span><span class="punctuation">;</span>
+    <span class="property">color</span><span class="punctuation">:</span> <span class="css-color-val">#2D5F3F</span><span class="punctuation">;</span>
+    <span class="property">margin-bottom</span><span class="punctuation">:</span> <span class="css-number">1</span><span class="css-unit">rem</span><span class="punctuation">;</span>
+<span class="punctuation">}</span>
+
+<span class="selector">.hero</span> <span class="selector">p</span> <span class="punctuation">{</span>
+    <span class="property">font-size</span><span class="punctuation">:</span> <span class="css-number">1.3</span><span class="css-unit">rem</span><span class="punctuation">;</span>
+    <span class="property">color</span><span class="punctuation">:</span> <span class="css-color-val">#4A3728</span><span class="punctuation">;</span>
+    <span class="property">margin-bottom</span><span class="punctuation">:</span> <span class="css-number">2</span><span class="css-unit">rem</span><span class="punctuation">;</span>
+<span class="punctuation">}</span>
+
+<span class="selector">.btn</span> <span class="punctuation">{</span>
+    <span class="property">background</span><span class="punctuation">:</span> <span class="css-color-val">#4A7C59</span><span class="punctuation">;</span>
+    <span class="property">color</span><span class="punctuation">:</span> <span class="css-value">white</span><span class="punctuation">;</span>
+    <span class="property">padding</span><span class="punctuation">:</span> <span class="css-number">12</span><span class="css-unit">px</span> <span class="css-number">30</span><span class="css-unit">px</span><span class="punctuation">;</span>
+    <span class="property">border</span><span class="punctuation">:</span> <span class="css-value">none</span><span class="punctuation">;</span>
+    <span class="property">border-radius</span><span class="punctuation">:</span> <span class="css-number">8</span><span class="css-unit">px</span><span class="punctuation">;</span>
+    <span class="property">font-size</span><span class="punctuation">:</span> <span class="css-number">1.1</span><span class="css-unit">rem</span><span class="punctuation">;</span>
+    <span class="property">font-weight</span><span class="punctuation">:</span> <span class="css-number">700</span><span class="punctuation">;</span>
+    <span class="property">cursor</span><span class="punctuation">:</span> <span class="css-value">pointer</span><span class="punctuation">;</span>
+<span class="punctuation">}</span>
+
+<span class="comment">/* ===== Products Section ===== */</span>
+<span class="selector">.products-section</span> <span class="punctuation">{</span>
+    <span class="property">padding</span><span class="punctuation">:</span> <span class="css-number">4</span><span class="css-unit">rem</span> <span class="css-number">2</span><span class="css-unit">rem</span><span class="punctuation">;</span>
+    <span class="property">text-align</span><span class="punctuation">:</span> <span class="css-value">center</span><span class="punctuation">;</span>
+<span class="punctuation">}</span>
+
+<span class="selector">.products-section</span> <span class="selector">h2</span> <span class="punctuation">{</span>
+    <span class="property">font-size</span><span class="punctuation">:</span> <span class="css-number">2.5</span><span class="css-unit">rem</span><span class="punctuation">;</span>
+    <span class="property">color</span><span class="punctuation">:</span> <span class="css-color-val">#4A7C59</span><span class="punctuation">;</span>
+    <span class="property">margin-bottom</span><span class="punctuation">:</span> <span class="css-number">3</span><span class="css-unit">rem</span><span class="punctuation">;</span>
+<span class="punctuation">}</span>
+
+<span class="comment">/* ===== Cards Container (Flexbox) ===== */</span>
+<span class="selector">.cards-container</span> <span class="punctuation">{</span>
+    <span class="flex-prop">display</span><span class="punctuation">:</span> <span class="css-value">flex</span><span class="punctuation">;</span>
+    <span class="flex-prop">flex-wrap</span><span class="punctuation">:</span> <span class="css-value">wrap</span><span class="punctuation">;</span>
+    <span class="flex-prop">gap</span><span class="punctuation">:</span> <span class="css-number">2</span><span class="css-unit">rem</span><span class="punctuation">;</span>
+    <span class="flex-prop">justify-content</span><span class="punctuation">:</span> <span class="css-value">center</span><span class="punctuation">;</span>
+    <span class="property">max-width</span><span class="punctuation">:</span> <span class="css-number">1200</span><span class="css-unit">px</span><span class="punctuation">;</span>
+    <span class="property">margin</span><span class="punctuation">:</span> <span class="css-number">0</span> <span class="css-value">auto</span><span class="punctuation">;</span>
+<span class="punctuation">}</span>
+
+<span class="comment">/* ===== Card ===== */</span>
+<span class="selector">.card</span> <span class="punctuation">{</span>
+    <span class="flex-prop">flex</span><span class="punctuation">:</span> <span class="css-number">1</span> <span class="css-number">1</span> <span class="css-number">300</span><span class="css-unit">px</span><span class="punctuation">;</span>
+    <span class="property">max-width</span><span class="punctuation">:</span> <span class="css-number">400</span><span class="css-unit">px</span><span class="punctuation">;</span>
+    <span class="property">background</span><span class="punctuation">:</span> <span class="css-value">white</span><span class="punctuation">;</span>
+    <span class="property">padding</span><span class="punctuation">:</span> <span class="css-number">2</span><span class="css-unit">rem</span><span class="punctuation">;</span>
+    <span class="property">border-radius</span><span class="punctuation">:</span> <span class="css-number">12</span><span class="css-unit">px</span><span class="punctuation">;</span>
+    <span class="property">box-shadow</span><span class="punctuation">:</span> <span class="css-number">0</span> <span class="css-number">5</span><span class="css-unit">px</span> <span class="css-number">20</span><span class="css-unit">px</span> <span class="css-value">rgba(0,0,0,0.1)</span><span class="punctuation">;</span>
+    <span class="property">text-align</span><span class="punctuation">:</span> <span class="css-value">right</span><span class="punctuation">;</span>
+    <span class="property">transition</span><span class="punctuation">:</span> <span class="css-value">transform 0.3s</span><span class="punctuation">;</span>
+<span class="punctuation">}</span>
+
+<span class="selector">.card:hover</span> <span class="punctuation">{</span>
+    <span class="property">transform</span><span class="punctuation">:</span> <span class="css-value">translateY(-5px)</span><span class="punctuation">;</span>
+<span class="punctuation">}</span>
+
+<span class="selector">.card</span> <span class="selector">h3</span> <span class="punctuation">{</span>
+    <span class="property">color</span><span class="punctuation">:</span> <span class="css-color-val">#4A7C59</span><span class="punctuation">;</span>
+    <span class="property">margin-bottom</span><span class="punctuation">:</span> <span class="css-number">1</span><span class="css-unit">rem</span><span class="punctuation">;</span>
+<span class="punctuation">}</span>
+
+<span class="selector">.price</span> <span class="punctuation">{</span>
+    <span class="property">display</span><span class="punctuation">:</span> <span class="css-value">block</span><span class="punctuation">;</span>
+    <span class="property">margin-top</span><span class="punctuation">:</span> <span class="css-number">1</span><span class="css-unit">rem</span><span class="punctuation">;</span>
+    <span class="property">font-size</span><span class="punctuation">:</span> <span class="css-number">1.5</span><span class="css-unit">rem</span><span class="punctuation">;</span>
+    <span class="property">font-weight</span><span class="punctuation">:</span> <span class="css-number">900</span><span class="punctuation">;</span>
+    <span class="property">color</span><span class="punctuation">:</span> <span class="css-color-val">#D4A574</span><span class="punctuation">;</span>
+<span class="punctuation">}</span>
+
+<span class="comment">/* ===== Footer ===== */</span>
+<span class="selector">.footer</span> <span class="punctuation">{</span>
+    <span class="flex-prop">display</span><span class="punctuation">:</span> <span class="css-value">flex</span><span class="punctuation">;</span>
+    <span class="flex-prop">justify-content</span><span class="punctuation">:</span> <span class="css-value">center</span><span class="punctuation">;</span>
+    <span class="flex-prop">align-items</span><span class="punctuation">:</span> <span class="css-value">center</span><span class="punctuation">;</span>
+    <span class="property">padding</span><span class="punctuation">:</span> <span class="css-number">2</span><span class="css-unit">rem</span><span class="punctuation">;</span>
+    <span class="property">background</span><span class="punctuation">:</span> <span class="css-color-val">#2D5F3F</span><span class="punctuation">;</span>
+    <span class="property">color</span><span class="punctuation">:</span> <span class="css-value">white</span><span class="punctuation">;</span>
+    <span class="property">text-align</span><span class="punctuation">:</span> <span class="css-value">center</span><span class="punctuation">;</span>
+<span class="punctuation">}</span></code></pre>
+            </div>
+        </section>
+
+        <!-- ========== Summary ========== -->
+        <section>
+            <div class="summary-box">
+                <h3>📌 ملخص المحاضرة</h3>
+                <ul class="summary-list">
+                    <li>Flexbox = نظام Layout أحادي البعد (صف أو عمود)</li>
+                    <li>display: flex يحوّل العنصر لـ Flex Container</li>
+                    <li>الأبناء المباشرين بيبقوا Flex Items تلقائياً</li>
+                    <li>محورين: Main Axis (الاتجاه) و Cross Axis (عمودي عليه)</li>
+                    <li>flex-direction: row (افتراضي), column, row-reverse, column-reverse</li>
+                    <li>justify-content: محاذاة على Main Axis (flex-start, center, space-between, space-around, space-evenly)</li>
+                    <li>align-items: محاذاة على Cross Axis (stretch, flex-start, flex-end, center, baseline)</li>
+                    <li>align-self: محاذاة فردية لعنصر واحد</li>
+                    <li>flex-wrap: wrap يسمح للعناصر بالنزول لسطور جديدة</li>
+                    <li>gap: مسافة بين العناصر (أفضل من margin)</li>
+                    <li>flex-grow: معامل النمو، flex-shrink: معامل الانكماش، flex-basis: الحجم الأساسي</li>
+                    <li>flex: shorthand لـ grow shrink basis</li>
+                    <li>order: تغيير ترتيب العناصر بصرياً</li>
+                    <li>التوسيط الكامل: display: flex + justify-content: center + align-items: center</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- ========== Next Lecture ========== -->
+        <section>
+            <div class="next-box">
+                <h3>🚀 المحاضرة الجاية</h3>
+                <p>هننتقل لـ <strong>CSS Grid</strong> — نظام Layout ثنائي الأبعاد لبناء Layoutات معقدة.</p>
+                <p style="margin-top: 10px;">هنشوف إزاي نعمل Rows و Columns، ونتحكم في كل خلية بشكل مستقل.</p>
+                <span class="next-topic">المحاضرة القادمة: CSS Grid</span>
+            </div>
+        </section>
+
+        <!-- ========== Quiz Section ========== -->
+        <section class="quiz-section">
+            <div class="quiz-header">
+                <div class="quiz-header-icon">❓</div>
+                <div>
+                    <h2>أسئلة اختيار من متعدد</h2>
+                    <p>10 أسئلة لاختبار فهمك لمحتوى المحاضرة</p>
+                </div>
+            </div>
+
+            <div class="question">
+                <span class="question-number">سؤال 1</span>
+                <h4>ما هو value اللي بيحوّل العنصر لـ Flex Container؟</h4>
+                <ul class="options">
+                    <li><span class="option-letter">أ</span> display: flexbox</li>
+                    <li><span class="option-letter">ب</span> display: flex</li>
+                    <li><span class="option-letter">ج</span> display: flexible</li>
+                    <li><span class="option-letter">د</span> flex: container</li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <span class="question-number">سؤال 2</span>
+                <h4>ما هو الاتجاه الافتراضي لـ flex-direction؟</h4>
+                <ul class="options">
+                    <li><span class="option-letter">أ</span> column</li>
+                    <li><span class="option-letter">ب</span> row</li>
+                    <li><span class="option-letter">ج</span> horizontal</li>
+                    <li><span class="option-letter">د</span> vertical</li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <span class="question-number">سؤال 3</span>
+                <h4>أي property بيوزع العناصر على Main Axis؟</h4>
+                <ul class="options">
+                    <li><span class="option-letter">أ</span> align-items</li>
+                    <li><span class="option-letter">ب</span> justify-content</li>
+                    <li><span class="option-letter">ج</span> flex-direction</li>
+                    <li><span class="option-letter">د</span> flex-wrap</li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <span class="question-number">سؤال 4</span>
+                <h4>ما هو value اللي بيخلي العناصر في وسط Main Axis؟</h4>
+                <ul class="options">
+                    <li><span class="option-letter">أ</span> justify-content: middle</li>
+                    <li><span class="option-letter">ب</span> justify-content: center</li>
+                    <li><span class="option-letter">ج</span> align-items: center</li>
+                    <li><span class="option-letter">د</span> justify-content: central</li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <span class="question-number">سؤال 5</span>
+                <h4>ما هو value اللي بيخلي أول عنصر في البداية وآخر عنصر في النهاية مع توزيع الباقي؟</h4>
+                <ul class="options">
+                    <li><span class="option-letter">أ</span> space-around</li>
+                    <li><span class="option-letter">ب</span> space-evenly</li>
+                    <li><span class="option-letter">ج</span> space-between</li>
+                    <li><span class="option-letter">د</span> distribute</li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <span class="question-number">سؤال 6</span>
+                <h4>أي property بيضيف مسافة بين العناصر مباشرة؟</h4>
+                <ul class="options">
+                    <li><span class="option-letter">أ</span> margin</li>
+                    <li><span class="option-letter">ب</span> padding</li>
+                    <li><span class="option-letter">ج</span> gap</li>
+                    <li><span class="option-letter">د</span> spacing</li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <span class="question-number">سؤال 7</span>
+                <h4>ما هو shorthand property لـ flex-grow, flex-shrink, flex-basis؟</h4>
+                <ul class="options">
+                    <li><span class="option-letter">أ</span> flex-size</li>
+                    <li><span class="option-letter">ب</span> flex</li>
+                    <li><span class="option-letter">ج</span> flex-all</li>
+                    <li><span class="option-letter">د</span> flex-properties</li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <span class="question-number">سؤال 8</span>
+                <h4>ما هو value اللي بيخلي العناصر تنزل لسطور جديدة؟</h4>
+                <ul class="options">
+                    <li><span class="option-letter">أ</span> flex-wrap: break</li>
+                    <li><span class="option-letter">ب</span> flex-wrap: wrap</li>
+                    <li><span class="option-letter">ج</span> flex-wrap: new-line</li>
+                    <li><span class="option-letter">د</span> flex-flow: wrap</li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <span class="question-number">سؤال 9</span>
+                <h4>أي property بيغير ترتيب عنصر واحد بصرياً؟</h4>
+                <ul class="options">
+                    <li><span class="option-letter">أ</span> position</li>
+                    <li><span class="option-letter">ب</span> z-index</li>
+                    <li><span class="option-letter">ج</span> order</li>
+                    <li><span class="option-letter">د</span> sequence</li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <span class="question-number">سؤال 10</span>
+                <h4>إزاي توسط عنصر أفقياً ورأسياً بـ Flexbox؟</h4>
+                <ul class="options">
+                    <li><span class="option-letter">أ</span> justify-content: center بس</li>
+                    <li><span class="option-letter">ب</span> align-items: center بس</li>
+                    <li><span class="option-letter">ج</span> display: flex + justify-content: center + align-items: center</li>
+                    <li><span class="option-letter">د</span> margin: auto</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- ========== Homework Section ========== -->
+        <section class="homework-section">
+            <div class="homework-header">
+                <div class="homework-header-icon">📝</div>
+                <div>
+                    <h2>واجبات المحاضرة</h2>
+                    <p>5 مسائل تطبيقية متدرجة لتثبيت ما تعلمته</p>
+                </div>
+            </div>
+
+            <div class="homework-item">
+                <h4>📌 الواجب الأول: Flexbox Basics</h4>
+                <p>ابني 3 containers مختلفة:</p>
+                <ul>
+                    <li>Container 1: flex-direction: row — 4 items</li>
+                    <li>Container 2: flex-direction: column — 4 items</li>
+                    <li>Container 3: flex-direction: row-reverse — 4 items</li>
+                    <li>كل container بلون مختلف للخلفية</li>
+                    <li>اكتب تحت كل container شرح للسلوك</li>
+                </ul>
+            </div>
+
+            <div class="homework-item">
+                <h4>📌 الواجب الثاني: justify-content Exploration</h4>
+                <p>ابني 6 containers بنفس الـ items:</p>
+                <ul>
+                    <li>Container 1: justify-content: flex-start</li>
+                    <li>Container 2: justify-content: flex-end</li>
+                    <li>Container 3: justify-content: center</li>
+                    <li>Container 4: justify-content: space-between</li>
+                    <li>Container 5: justify-content: space-around</li>
+                    <li>Container 6: justify-content: space-evenly</li>
+                    <li>اكتب تحت كل container اسم الـ value</li>
+                </ul>
+            </div>
+
+            <div class="homework-item">
+                <h4>📌 الواجب الثالث: Cards Layout</h4>
+                <p>ابني Cards Layout احترافي:</p>
+                <ul>
+                    <li>Container بـ flex-wrap: wrap</li>
+                    <li>gap: 2rem</li>
+                    <li>6 cards بـ flex: 1 1 300px</li>
+                    <li>كل card فيه: عنوان، وصف، سعر، زر</li>
+                    <li>hover effect على كل card</li>
+                    <li>جرب تغير حجم المتصفح وشوف الـ wrap</li>
+                </ul>
+            </div>
+
+            <div class="homework-item">
+                <h4>📌 الواجب الرابع: Navigation Bar</h4>
+                <p>ابني Navigation Bar كامل:</p>
+                <ul>
+                    <li>Logo على اليمين + Links على الشمال (space-between)</li>
+                    <li>Links بـ flex + gap</li>
+                    <li>Hover effect على الروابط</li>
+                    <li>Responsive: على الموبايل الـ Links تنزل لتحت (flex-direction: column)</li>
+                    <li>استخدم media queries (هنشوفهم في المحاضرة 11)</li>
+                </ul>
+            </div>
+
+            <div class="homework-item">
+                <h4>📌 الواجب الخامس: التحدي — Landing Page</h4>
+                <p>ابني Landing Page كاملة تجمع كل اللي اتعلمته:</p>
+                <ul>
+                    <li>Navbar بـ Flexbox (logo + links + button)</li>
+                    <li>Hero Section بـ flex-direction: column + center + center</li>
+                    <li>Features Section: 3 cards بـ flex-wrap + gap</li>
+                    <li>Testimonials Section: 3 quotes بـ flex + space-between</li>
+                    <li>CTA Section بـ centered content</li>
+                    <li>Footer بـ flex + space-between (links + social + copyright)</li>
+                    <li>استخدم flex-grow, flex-basis في الأماكن المناسبة</li>
+                    <li>نظم الملفات: index.html + css/style.css + images/</li>
+                </ul>
+            </div>
+        </section>
+
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="logo">
+                <div class="logo-icon">S</div>
+                <span>Sunshine T Academy</span>
+            </div>
+            <p>Frontend Level 1 — HTML + CSS</p>
+            <p>بنحوّل الحلم لكود ☀️</p>
+            <p class="motto">Flexbox • Layout • Navigation • Cards</p>
+        </div>
+    </footer>
+
+</body>
+</html>
